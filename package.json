@@ -1,0 +1,13 @@
+{
+  "name": "nodejsSolr",
+  "version": "0.0.0",
+  "description": "nodejsSolr",
+  "main": "app.js",
+  "author": {
+    "name": "tuanzhang",
+    "email": ""
+  },
+  "dependencies": {
+    "solr-client":"0.6.0"
+  }
+}
