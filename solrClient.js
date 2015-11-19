@@ -2,6 +2,7 @@
  * Created by user1 on 18/11/2015.
  */
 var solr = require('solr-client');
+var logger=require('./log.js').logger;
 
 var client = solr.createClient(
     {
@@ -21,7 +22,7 @@ exports.updateContent = function updateContent(nodeId,content){
     };
     client.add(updateDoc,function(err,obj){
         if(err){
-            console.log(err);
+            logger.error("update solr index error:"+err);
         }else{
             //console.log("doc updated:"+obj);
             //client.softCommit(function(err,res){
