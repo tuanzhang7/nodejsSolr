@@ -29,20 +29,38 @@ exports.getByNodeId = function getByNodeId(nodeId,callback){
         if (res.statusCode === 200) {
             var result='';
             res.on('data', function (chunk) {
+                //dlprogress += chunk.length;
                 result+=chunk;
             });
             res.on('end', function() {
                 //logger.info("Got response end: " + result);
+                //>100mb
+				logger.info("Downloaded: " + nodeId+" size:"+formatBytes(result.length));
+                if(result.length>13107200){
+                    logger.info("Downloaded Large file: " + nodeId+" size:"+formatBytes(result.length));
+                }
                 return callback(result);
             });
         }else if(res.statusCode === 500) {
             logger.error("nodeId  does not exist: " + nodeId );
+            return callback();
+        }else if(res.statusCode === 204) {
+            logger.info("no content: " + nodeId );
+            return callback();
         }
     }).on('error', function(e) {
         logger.error("Got error: " + nodeId +"--"+e.message);
     });
-    request.setTimeout( 20000, function( ) {
+    request.setTimeout( 50000, function( ) {
         logger.error("timeout: " + nodeId );
     });
 
 };
+function formatBytes(bytes,decimals) {
+    if(bytes == 0) return '0 Byte';
+    var k = 1000;
+    var dm = decimals + 1 || 3;
+    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    var i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
+}
