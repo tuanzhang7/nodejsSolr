@@ -50,7 +50,24 @@ exports.updateContents = function updateContents(docs,callback){
         }
     });
 };
-
+exports.getMaxTransactionId = function getMaxTransactionId(callback){
+    var query = client.createQuery()
+        .q('*:*')
+        .set("stats=true")
+        .set("stats.field=sys_transaction_id")
+        .start(0)
+        .rows(0);
+    client.search(query,function(err,obj){
+        logger.info(obj);
+        if(err){
+            logger.error("update solr index error:"+err);
+            return callback(err);
+        }else{
+            var maxId=obj.stats.stats_fields["sys_transaction_id"].max
+            return callback(maxId);
+        }
+    });
+};
 function addMetadata(){
     var docs = [];
     for(var i = 0; i <= 1000 ; i++){
