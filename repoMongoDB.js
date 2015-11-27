@@ -47,3 +47,41 @@ exports.getByTransactionId = function getByTransactionId(transId,callback){
         });
     });
 };
+
+exports.getByTransactionIds = function getByTransactionIds(startTransId,size,callback){
+    MongoClient.connect(url, function (err, db) {
+        var cmsnodes = db.collection(collection);
+
+        var query={sys_transaction_id:{"$gt":transId}};
+        var projection={ sys_transaction_id: 1 };
+        var sort={sys_transaction_id:1};
+        cmsnodes.find(query,projection).sort(sort).limit(size).toArray(function (err, docs) {
+            var transIdArray=[];
+            for(var i=0;i<docs.length;i++){
+                var id=docs[i].sys_transaction_id;
+                transIdArray.push(id);
+            }
+            db.close();
+            return callback(transIdArray);
+        });
+    });
+};
+
+function getNextTransactionIds(startTransId,size,callback){
+    MongoClient.connect(url, function (err, db) {
+        var cmsnodes = db.collection(collection);
+
+        var query={sys_transaction_id:{"$gt":transId}};
+        var projection={ sys_transaction_id: 1 };
+        var sort={sys_transaction_id:1};
+        cmsnodes.find(query,projection).sort(sort).limit(size).toArray(function (err, docs) {
+            var transIdArray=[];
+            for(var i=0;i<docs.length;i++){
+                var id=docs[i].sys_transaction_id;
+                transIdArray.push(id);
+            }
+            db.close();
+            return callback(transIdArray);
+        });
+    });
+}
