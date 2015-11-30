@@ -32,6 +32,7 @@ exports.updateContent = function updateContent(nodeId,content,callback){
 
     });
 };
+
 exports.updateContents = function updateContents(docs,callback){
     client.add(docs,function(err,obj){
         if(err){
@@ -50,6 +51,7 @@ exports.updateContents = function updateContents(docs,callback){
         }
     });
 };
+
 exports.getMaxTransactionId = function getMaxTransactionId(callback){
     var query = client.createQuery()
         .q('*:*')
@@ -63,11 +65,12 @@ exports.getMaxTransactionId = function getMaxTransactionId(callback){
             logger.error("update solr index error:"+err);
             return callback(err);
         }else{
-            var maxId=obj.stats.stats_fields["sys_transaction_id"].max
+            var maxId=obj.stats.stats_fields["sys_transaction_id"].max;
             return callback(maxId);
         }
     });
 };
+
 function addMetadata(){
     var docs = [];
     for(var i = 0; i <= 1000 ; i++){

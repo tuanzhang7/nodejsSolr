@@ -8,13 +8,13 @@
     "email": ""
   },
   "dependencies": {
-    "solr-client":"0.6.0",
+    "async": "1.5.0",
+    "cron": "1.0.9",
+    "moment": "2.10.6",
     "mongodb": "2.0.48",
-    "underscore":"1.8.3",
-    "moment":"2.10.6",
-    "cron":"1.0.9",
-    "underscore":"1.8.3",
-    "winston":"2.1.1",
-    "async":"1.5.0"
+    "prompt": "^0.2.14",
+    "solr-client": "0.6.0",
+    "underscore": "1.8.3",
+    "winston": "2.1.1"
   }
 }

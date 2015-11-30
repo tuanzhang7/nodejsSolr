@@ -97,11 +97,58 @@ exports.indexContent = function indexContent(cursor,mimeType,size) {
                         stopWatch(middle,1000);
                         middle=moment().valueOf();
                     }
-                    loop(startId,mimeType,size);
+                    indexContent(startId,mimeType,size);
                 });
         }
     });
 };
+
+exports.indexMetadata = function indexMetadata(startTransId) {
+
+    repo.getBatchTransactionIds(startTransId,function (data) {
+        logger.info('processing TransId:'+startTransId);
+        //if(counter>=50000){
+        //    stopWatch(start,counter);
+        //    return;
+        //}
+        if(data.length==0){
+            logger.info("no more data in database");
+            stopWatch(start,counter);
+            return;
+        }else{
+            var size=0;
+            var endTransId=_.max(data);
+            //logger.info('next:'+startId);
+            async.series([
+                function(callback){
+                    repo.getByTransactionIds(startTransId,endTransId,function (docs) {
+                        if(docs){
+                            size=docs.length;
+                            logger.info('batch size:'+size);
+                            //solrClient.updateContents(docs, function (err) {
+                            //    if (err) throw err;
+                                callback();
+                            //});
+                        }
+                        else{
+                            callback();
+                        }
+                    });
+                }
+            ],
+            function(err, results){
+                //logger.info('processed:'+startId);
+                counter+=size;
+                if(counter%1000==0){
+                    stopWatch(middle,1000);
+                    middle=moment().valueOf();
+                }
+                indexMetadata(endTransId);
+            });
+        }
+    });
+};
+
 function stopWatch(start,counter){
     var end = moment().valueOf();
     var duration=moment.duration(end-start);
