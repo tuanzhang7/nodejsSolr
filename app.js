@@ -1,5 +1,5 @@
 ﻿var prompt = require('prompt');
-var contentHelper = require('./content');
+var repoAlfresco = require('./repoAlfresco');
 var solrClient = require('./solrClient');
 var logger=require('./log.js').logger;
 var job=require('./job.js');
@@ -33,9 +33,13 @@ function loop(){
                 var startId=0;
                 var size=500;
                 //job.indexContent(startId,mimeType,size);
+
                 break;
             case "2":
                 console.log('Index Metadata......');
+                repoAlfresco.getMetadataByNodeId(219820,function(data){
+                    logger.info("get metadata:"+data);
+                });
                 //job.indexMetadata(startId);
                 break;
             case "10":

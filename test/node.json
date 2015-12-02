@@ -1,0 +1,173 @@
+
+    {
+      "id": 1239704,
+      "tenantDomain": "",
+      "nodeRef": "workspace://SpacesStore/a56fc4da-8341-4812-86c6-f2a67b81a238",
+      "type": "NCMS:NCMSFields",
+      "aclId": 89,
+      "txnId": 1976521,
+      "properties": {
+        "cm:modified": "2015-11-24T08:19:20.406+08:00",
+        "NCMS:editorial": "Remote full access (Can download / Can print / Can copy). Edited CSB (CE) 2015-10-19. Reviewed CE 2015-11-17. Reviewed GT 2015-11-24",
+        "NCMS:dc_source_m": [
+          "B26074919E"
+        ],
+        "NCMS:contributor": [
+          "Donor:Hainan Tan Clan Association ??????",
+          "Owner:Hainan Tan Clan Association ??????"
+        ],
+        "NCMS:Date_created_text_m": [
+          "1999"
+        ],
+        "NCMS:CMSUUID": "9cb93c00-3ea6-4646-944d-e8c46be72550",
+        "NCMS:Dc_location": [
+          "NLB RCLOS 929.20951 CSZ"
+        ],
+        "NCMS:Explicit": "??????????????????????????????.",
+        "sys:node-dbid": "1239704",
+        "NCMS:Format_extent_m": [
+          "40208 KB, 214 p."
+        ],
+        "NCMS:Subject": [
+          "LCSH:Chen family",
+          "_SingHeritage:Genealogy {18336113}",
+          "_SingHeritage:Family history {18336850}",
+          "nlbshtx:Organisations>>Associations>>Chinese Clans",
+          "nlbshtx:Ethnic Communities",
+          "LCSH:Nanchang (China)--Genealogy "
+        ],
+        "NCMS:dc_type_m": [
+          "nlbt:Manuscript {18335727}",
+          "DCMIType:Text {14312}"
+        ],
+        "NCMS:Dc_format_m": [
+          "application/pdf"
+        ],
+        "NCMS:rights_accessRights": "The information on this page and any images that appear here may be used for private research and study purposes only. They may not be copied, altered or amended in any way without first gaining the permission of the copyright holder.",
+        "cm:title": [
+          {
+            "locale": "en_",
+            "value": "?????1?"
+          }
+        ],
+        "sys:store-identifier": "SpacesStore",
+        "BookSG_eBook:hasCopy": "true",
+        "facet:audience": [
+          "Adults"
+        ],
+        "BookSG_eBook:bookType": "1",
+        "cm:content": {
+          "contentId": "1288903",
+          "encoding": "UTF-8",
+          "locale": "en_US_",
+          "mimetype": "application/pdf",
+          "size": "41173864"
+        },
+        "NCMS:Audience": "Adults",
+        "NCMS:coverage_spatial_m": [
+          "TGN:China"
+        ],
+        "NCMS:userStatus": "Published",
+        "NCMS:Description_tableOfContent_m": [
+          "????. ??, ?????."
+        ],
+        "cm:name": "B26074919E.pdf",
+        "BookSG_eBook:isSgeBook": "false",
+        "sys:locale": "en_US_",
+        "facet:collection": [
+          "Singapore Collection",
+          "Singapore Heritage Collection"
+        ],
+        "facet:language": [
+          "Chinese"
+        ],
+        "facet:date_created": "1999-01-01T00:00:00.000+08:00",
+        "NCMS:dc_language_m": [
+          "chi"
+        ],
+        "NCMS:Relation_isReferencedBy": [
+          "BID:201334282"
+        ],
+        "cm:modifier": "admin",
+        "facet:source": "NLB",
+        "facet:publisher": [
+          "National Library Board Singapore"
+        ],
+        "NCMS:Rights_rightsholder_m": [
+          "Hainan Tan Clan Association ??????"
+        ],
+        "sys:node-uuid": "a56fc4da-8341-4812-86c6-f2a67b81a238",
+        "facet:author": [
+          "Hainan Tan Clan Association",
+          "??????"
+        ],
+        "NCMS:IsWebsiteURIExist": "false",
+        "NCMS:publisher_m": [
+          "DigitalPublisher:National Library Board Singapore"
+        ],
+        "NCMS:title_alternative_m": [
+          "Chen shi zu pu. Juan san",
+          "????. ?3",
+          "Chen shi zu pu. Juan 3"
+        ],
+        "cm:creator": "admin",
+        "NCMS:title": "????. ??",
+        "facet:top_level": "Digital Resources",
+        "facet:subject": [
+          "Chen family",
+          "Genealogy",
+          "Family history",
+          "Organisations>>Associations>>Chinese Clans",
+          "Ethnic Communities",
+          "Nanchang (China)--Genealogy"
+        ],
+        "facet:type": [
+          "Manuscript"
+        ],
+        "NCMS:Identifier": [
+          "UUID:9cb93c00-3ea6-4646-944d-e8c46be72550"
+        ],
+        "NCMS:EditTemplate": "Manuscript",
+        "sys:store-protocol": "workspace",
+        "NCMS:Incipit": "???. ?????????????????????????????????.",
+        "NCMS:description_abstract_m": [
+          "??????????????, ?????????????."
+        ],
+        "NCMS:Relation_isPartOf": [
+          "Collection:NLB Collections>>Singapore Collection>>Singapore Heritage Collection {10125}"
+        ],
+        "NCMS:description_m": [
+          "????. ???????. Title devised by Library staff."
+        ],
+        "cm:created": "2014-10-01T09:25:06.000+08:00",
+        "BookSG_eBook:isBook": "true",
+        "NCMS:rights": "All rights reserved. Hainan Tan Clan Association ??????"
+      },
+      "aspects": [
+        "cm:auditable",
+        "facet:facetFields",
+        "sys:referenceable",
+        "cm:titled",
+        "sys:localized",
+        "BookSG_eBook:BookSG_eBookFields"
+      ],
+      "paths": [
+        {
+          "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}NLB_Project/{http://www.alfresco.org/model/content/1.0}BookSG/{http://www.alfresco.org/model/content/1.0}eBooks/{http://www.alfresco.org/model/content/1.0}type1/{http://www.alfresco.org/model/content/1.0}_x0032_0140120_x0020_DU_R657/{http://www.alfresco.org/model/content/1.0}B26074919E.pdf"
+        }
+      ],
+      "ancestors": [
+        "workspace://SpacesStore/69df4f75-145b-4923-97eb-20e14f0e9fb6",
+        "workspace://SpacesStore/d934dac5-25fd-49ba-95aa-5fbf4d50f944",
+        "workspace://SpacesStore/8c362e98-1a23-47c6-a6fc-7086f80c1f3e",
+        "workspace://SpacesStore/18cd0359-79f8-45d7-a4e0-80c579f45eac",
+        "workspace://SpacesStore/171a07ad-f899-4f94-bbdd-7a373ec8255c",
+        "workspace://SpacesStore/f4218395-85a8-405a-be63-090ef975c7b1",
+        "workspace://SpacesStore/7bbdf36e-8bd5-40b5-ac08-bd775999c8e5"
+      ],
+      "parentAssocs": [
+        "workspace://SpacesStore/171a07ad-f899-4f94-bbdd-7a373ec8255c|workspace://SpacesStore/a56fc4da-8341-4812-86c6-f2a67b81a238|{http://www.alfresco.org/model/content/1.0}contains|{http://www.alfresco.org/model/content/1.0}B26074919E.pdf|true|-1"
+      ],
+      "parentAssocsCrc": 2519358001,
+      "owner": "admin"
+    }

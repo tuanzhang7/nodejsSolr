@@ -25,7 +25,7 @@ exports.indexContent = function indexContent(cursor,mimeType,size) {
         if(data.length==0){
             logger.info("no more data in database");
             stopWatch(start,counter);
-            return;
+            //return;
         }else{
             startId=_.max(data);
             //logger.info('next:'+startId);
@@ -55,7 +55,7 @@ exports.indexContent = function indexContent(cursor,mimeType,size) {
                                 }
                                 else{
                                     //logger.info("before save to local:"+nodeId);
-                                    contentHelper.getByNodeId(nodeId, function (data2) {
+                                    contentHelper.getContentByNodeId(nodeId, function (data2) {
                                         //logger.info("got file from alf:"+nodeId);
                                         if(data2){
                                             if (fs.existsSync(path)===false) {
@@ -114,7 +114,7 @@ exports.indexMetadata = function indexMetadata(startTransId) {
         if(data.length==0){
             logger.info("no more data in database");
             stopWatch(start,counter);
-            return;
+            //return;
         }else{
             var size=0;
             var endTransId=_.max(data);
