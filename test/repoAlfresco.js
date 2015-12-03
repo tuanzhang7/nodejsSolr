@@ -12,7 +12,7 @@ describe('repoAlfresco', function() {
         it('tenantDomain should not exit', function () {
             assert.equal(undefined, result.tenantDomain);
         });
-        it('cm:title,modifier,creator,sys:locale should not exit', function () {
+        it('cm:title,modifier,creator,sys:locale,sys:store-identifier,sys:store-protocol should not exit', function () {
             assert.equal(undefined, result["cm:title"]);
             assert.equal(undefined, result["cm:modifier"]);
             assert.equal(undefined, result["cm:creator"]);
@@ -24,6 +24,8 @@ describe('repoAlfresco', function() {
             assert.equal(undefined, result["cm_content"]);
 
             assert.equal(undefined, result["sys_locale"]);
+            assert.equal(undefined, result["sys_store-identifier"]);
+            assert.equal(undefined, result["sys_store-protocol"]);
 
         });
 
@@ -47,5 +49,16 @@ describe('repoAlfresco', function() {
             assert.equal('_SingHeritage:Genealogy {18336113}', result.NCMS_Subject[1]);
         });
 
+        it('Path should exist', function () {
+            assert.equal('/app:company_home/cm:NLB_Project/cm:BookSG/cm:eBooks/cm:type1/cm:_x0032_0140120_x0020_DU_R657/cm:B26074919E.pdf', result.PATH);
+        });
+
+        it('id should exist and is nodeId', function () {
+            assert.equal('1239704', result.id);
+        });
+
+        it('txnId should exist and is txnId', function () {
+            assert.equal('1976521', result.txnId);
+        });
     });
 });

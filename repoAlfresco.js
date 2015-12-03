@@ -5,7 +5,7 @@ var MongoClient = require('mongodb').MongoClient
     , assert = require('assert');
 var http = require('http');
 var logger=require('./log.js').logger;
-
+var escapeStringRegexp = require('escape-string-regexp');
 
 var mongodbURL = 'mongodb://172.30.11.195:3306/cmsreports';
 
@@ -111,7 +111,8 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
     var nodeJson = JSON.parse(node, function(key, value) {
         if (value && typeof value === 'object')
             for (var k in value) {
-                if(k=='cm:title'||k=='cm:modifier'||k=='cm:creator'||k=='sys:locale'||k=='cm:content'){
+                if(k=='cm:title'||k=='cm:modifier'||k=='cm:creator'
+                    ||k=='sys:locale'||k=='cm:content'||k=='sys:store-identifier'||k=='sys:store-protocol'){
                     delete value[k];
                 }
                 else if (k.indexOf(':')>0 && Object.hasOwnProperty.call(value, k)) {
@@ -124,6 +125,10 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
 
     //var nodeJson=JSON.parse(node)
     var obj=nodeJson.properties;
+    obj.PATH=formatAlfPath(nodeJson.paths[0].path);
+    obj.id=nodeJson.id;
+    obj.txnId=nodeJson.txnId;
+
     logger.info(JSON.stringify(obj));
     //delete obj["cm_title"];
     //delete obj["cm_modifier"];
@@ -133,6 +138,13 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
 
 
     return obj;
+};
+function formatAlfPath(alfPath){
+    var regCm = new RegExp(escapeStringRegexp('{http://www.alfresco.org/model/content/1.0}'),'g');
+    var regApp = new RegExp(escapeStringRegexp('{http://www.alfresco.org/model/application/1.0}'),'g');
+
+    return alfPath.replace(regCm,'cm:')
+        .replace(regApp,'app:');
 }
 function formatBytes(bytes,decimals) {
     if(bytes == 0) return '0 Byte';
