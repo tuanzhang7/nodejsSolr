@@ -10,12 +10,10 @@ var escapeStringRegexp = require('escape-string-regexp');
 var mongodbURL = 'mongodb://172.30.11.195:3306/cmsreports';
 
 var alfHostName="10.14.244.84";
-var alfHost="http://"+alfHostName;
-
 
 exports.getContentByNodeId = function getContentByNodeId(nodeId,callback){
     var alfGetContentURL="/alfresco/service/api/solr/textContent?nodeId="+nodeId+"&propertyQName=%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcontent";
-    var url=alfHost+alfGetContentURL;
+
     var options = {
         hostname: alfHostName,
         port: 80,
@@ -104,6 +102,7 @@ exports.getMetadataByNodeId= function getMetadataByNodeId(nodeId,callback){
         request.abort();
     });
 };
+
 exports.convertAlfNodeJson= function convertAlfNodeJson(node){
 
     //node=node.replace('"NCMS:','"');
@@ -139,6 +138,7 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
 
     return obj;
 };
+
 function formatAlfPath(alfPath){
     var regCm = new RegExp(escapeStringRegexp('{http://www.alfresco.org/model/content/1.0}'),'g');
     var regApp = new RegExp(escapeStringRegexp('{http://www.alfresco.org/model/application/1.0}'),'g');
@@ -146,6 +146,7 @@ function formatAlfPath(alfPath){
     return alfPath.replace(regCm,'cm:')
         .replace(regApp,'app:');
 }
+
 function formatBytes(bytes,decimals) {
     if(bytes == 0) return '0 Byte';
     var k = 1000;
@@ -154,3 +155,5 @@ function formatBytes(bytes,decimals) {
     var i = Math.floor(Math.log(bytes) / Math.log(k));
     return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
 }
+
+exports.__formatAlfPath=formatAlfPath;
