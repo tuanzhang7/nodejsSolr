@@ -1,16 +1,13 @@
 /**
  * Created by user1 on 18/11/2015.
  */
-var MongoClient = require('mongodb').MongoClient
-    , assert = require('assert');
 var http = require('http');
 var logger=require('./log.js').logger;
 var escapeStringRegexp = require('escape-string-regexp');
+var config = require('./config.json');
 
-var mongodbURL = 'mongodb://172.30.11.195:3306/cmsreports';
-
-var alfHostName="10.14.244.84";
-
+var alfHostName=config.alfresco.host;//"localhost";//"ncmsr.nlb.gov.sg";//"10.14.244.84";
+var maxSockets=50;
 exports.getContentByNodeId = function getContentByNodeId(nodeId,callback){
     var alfGetContentURL="/alfresco/service/api/solr/textContent?nodeId="+nodeId+"&propertyQName=%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcontent";
 
@@ -18,11 +15,11 @@ exports.getContentByNodeId = function getContentByNodeId(nodeId,callback){
         hostname: alfHostName,
         port: 80,
         path: alfGetContentURL,
-        method: 'GET',
-        agent:false
+        method: 'GET'
+        //agent:false
     };
-    //var keepAliveAgent = new http.Agent({ keepAlive: true });
-    //options.agent = keepAliveAgent;
+    var keepAliveAgent = new http.Agent({ keepAlive: true });
+    options.agent = keepAliveAgent;
 
     var request = http.get(options, function(res) {
         //logger.info("Got response: " + res.statusCode);
@@ -72,11 +69,97 @@ exports.getMetadataByNodeId= function getMetadataByNodeId(nodeId,callback){
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(body)
+        },
+        agent: false
+    };
+    //var keepAliveAgent = new http.Agent({ keepAlive: true,maxSockets:maxSockets });
+    //options.agent = keepAliveAgent;
+    var request = http.request(options, function(res) {
+        if (res.statusCode === 200) {
+            var result='';
+            res.on('data', function (chunk) {
+                result+=chunk;
+            });
+            res.on('end', function() {
+                return callback(null,result);
+            });
+        }else if(res.statusCode === 500) {
+            return callback(new Error("no nodes in txns 500: " +  nodeId));
+        }else if(res.statusCode === 204) {
+            return callback(new Error("no nodes in txns 204: " +  nodeId));
         }
+    }).on('error', function(e) {
+        return callback(new Error("Get metadata error: " + nodeId +"--"+e.message));
+    });
+    request.end(body);
+    request.setTimeout( 20000, function( ) {
+        logger.error("timeout: will abort,check if is folder:" + nodeId );
+        request.abort();
+    });
+};
+
+exports.getNodesByTxnId= function getNodesByTxnId(fromTxnId,toTxnId,callback){
+
+    var body = JSON.stringify({
+        "fromTxnId": fromTxnId,
+        "toTxnId": toTxnId,
+        "maxResults": 0
+    });
+    var options = {
+        hostname: alfHostName,
+        port: 80,
+        path: "/alfresco/service/api/solr/nodes",
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body)
+        },
+        agent: false
+    };
+    //var keepAliveAgent = new http.Agent({ keepAlive: true,maxSockets:maxSockets });
+    //options.agent = keepAliveAgent;
+    var request = http.request(options, function(res) {
+        if (res.statusCode === 200) {
+            var result='';
+            res.on('data', function (chunk) {
+                result+=chunk;
+            });
+            res.on('end', function() {
+                return callback(null,result);
+            });
+        }else if(res.statusCode === 500) {
+            return callback(new Error("getNodesByTxnId error 500: " +  fromTxnId+"-"+toTxnId));
+        }else if(res.statusCode === 204) {
+            return callback(new Error("no nodes in txns 204: " +  fromTxnId+"-"+toTxnId));
+        }
+    }).on('error', function(e) {
+        //logger.error("getNodesByTxnId error: " +  fromTxnId+"-"+toTxnId  +"--"+e.message);
+        return callback(new Error("getNodesByTxnId error: " + fromTxnId+"-"+toTxnId  +"--"+e.message));
+
+    });
+    request.end(body);
+    //request.setTimeout( 30000, function( ) {
+    //    logger.error("timeout: will abort" + fromTxnId+"-"+toTxnId );
+    //    request.abort();
+    //});
+};
+
+exports.getTxnsByTime= function getTxnsByTime(fromCommitTime,toCommitTime,maxResults,callback){
+    //1325347200000 2012/01/01
+    var alfURL="/alfresco/service/api/solr/transactions?fromCommitTime="+fromCommitTime+"&toCommitTime="+toCommitTime+"&maxResults="+maxResults;
+    var options = {
+        hostname: alfHostName,
+        port: 80,
+        path: alfURL,
+        method: 'GET',
+        agent: false
     };
 
-    var request = http.request(options, function(res) {
-        logger.info("Got response: " + res.statusCode);
+    //var keepAliveAgent = new http.Agent({ keepAlive: true,maxSockets:maxSockets });
+    //options.agent = keepAliveAgent;
+
+    var request = http.get(options, function(res) {
+        //logger.info("Got response: " + res.statusCode);
         if (res.statusCode === 200) {
             var result='';
             res.on('data', function (chunk) {
@@ -84,23 +167,22 @@ exports.getMetadataByNodeId= function getMetadataByNodeId(nodeId,callback){
             });
             res.on('end', function() {
 
-                return callback(result);
+                return callback(null,result);
             });
         }else if(res.statusCode === 500) {
-            logger.error("nodeId does not exist: " + nodeId );
-            return callback();
+            return callback(new Error("Got Txns error 500: " + fromCommitTime));
         }else if(res.statusCode === 204) {
-            logger.error("no metadata???: " + nodeId );
-            return callback();
+            return callback(new Error("Got Txns error 204: " + fromCommitTime));
         }
     }).on('error', function(e) {
-        logger.error("Got metadata error: " + nodeId +"--"+e.message);
+        //logger.error("Got Txns error: " + fromCommitTime +"--"+e.message);
+        callback(new Error("Got Txns error: " + fromCommitTime +"--"+e.message));
+        //return callback();
     });
-    request.end(body);
-    request.setTimeout( 10000, function( ) {
-        logger.error("timeout: will abort" + nodeId );
-        request.abort();
-    });
+    //request.setTimeout( 10000, function( ) {
+    //    logger.error("timeout: will abort" + fromCommitTime );
+    //    request.abort();
+    //});
 };
 
 exports.convertAlfNodeJson= function convertAlfNodeJson(node){
@@ -128,14 +210,11 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
     obj.id=nodeJson.id;
     obj.txnId=nodeJson.txnId;
 
-    logger.info(JSON.stringify(obj));
+    //logger.info(JSON.stringify(obj));
     //delete obj["cm_title"];
     //delete obj["cm_modifier"];
     //delete obj["cm_creator"];
     //delete obj["sys_locale"];
-
-
-
     return obj;
 };
 
