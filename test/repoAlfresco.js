@@ -61,9 +61,6 @@ describe('repoAlfresco', function() {
             assert.equal('1976521', result.txnId);
         });
     });
-});
-
-describe('repoAlfresco', function() {
     describe('#__formatAlfPath()', function () {
         var result=repoAlfresco.__formatAlfPath("/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}NLB_Project/{http://www.alfresco.org/model/content/1.0}BookSG/{http://www.alfresco.org/model/content/1.0}eBooks/{http://www.alfresco.org/model/content/1.0}type1/{http://www.alfresco.org/model/content/1.0}_x0032_0140120_x0020_DU_R657/{http://www.alfresco.org/model/content/1.0}B26074919E.pdf");
 
