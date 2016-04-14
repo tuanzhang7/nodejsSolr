@@ -2,10 +2,18 @@
  * Created by user1 on 18/11/2015.
  */
 var logger=require('./log.js').logger;
-var MongoClient = require('mongodb').MongoClient
-    , assert = require('assert');
-var url = 'mongodb://172.30.11.195:3306/cmsreports';
-var collection='cmsnodes';
+var MongoClient = require('mongodb').MongoClient;
+var config = require('./config.json');
+var host=config.mongodb.host;
+var port=config.mongodb.port;
+var db=config.mongodb.db;
+//var collection=config.mongodb.collection;
+
+var url = 'mongodb://'+host+':'+port+'/'+db;
+
+
+
+
 var _ = require('underscore');
 //"text/html"
 exports.getNodeIdByMimeType = function getDataByMimeType(mimeType,startId,size,callback){
@@ -123,3 +131,28 @@ exports.getBatchTransactionIds = function getBatchTransactionIds(startTransId,ca
     });
 
 }
+
+exports.bulkWrite = function bulkWrite(docs,collection,callback){
+    //logger.info('url:'+url+' collection:'+collection);
+
+    MongoClient.connect(url, function(err, db) {
+        //console.log("Connected correctly to server");
+        var col = db.collection(collection);
+        col.insertMany(docs, function(err, r) {
+            // Finish up test
+            db.close();
+            return callback(err,r);
+        });
+
+        //// Create ordered bulk, for unordered initializeUnorderedBulkOp()
+        //var bulk = col.initializeUnorderedBulkOp();
+        //
+        //bulk.insertMany(docs);
+        //// Execute the bulk with a journal write concern
+        //bulk.execute(function(err, result) {
+        //    db.close();
+        //    return callback(result);
+        //});
+    });
+};
+

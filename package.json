@@ -12,7 +12,7 @@
     "cron": "1.0.9",
     "escape-string-regexp": "^1.0.3",
     "moment": "2.10.6",
-    "mongodb": "2.0.48",
+    "mongodb": "^2.1.3",
     "prompt": "^0.2.14",
     "readline-sync": "^1.2.21",
     "solr-client": "0.6.0",

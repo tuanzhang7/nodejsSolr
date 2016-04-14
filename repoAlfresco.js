@@ -7,7 +7,7 @@ var escapeStringRegexp = require('escape-string-regexp');
 var config = require('./config.json');
 
 var alfHostName=config.alfresco.host;//"localhost";//"ncmsr.nlb.gov.sg";//"10.14.244.84";
-var maxSockets=50;
+var maxSockets=config.alfresco.maxSockets;
 exports.getContentByNodeId = function getContentByNodeId(nodeId,callback){
     var alfGetContentURL="/alfresco/service/api/solr/textContent?nodeId="+nodeId+"&propertyQName=%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcontent";
 
@@ -69,11 +69,10 @@ exports.getMetadataByNodeId= function getMetadataByNodeId(nodeId,callback){
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(body)
-        },
-        agent: false
+        }
     };
-    //var keepAliveAgent = new http.Agent({ keepAlive: true,maxSockets:maxSockets });
-    //options.agent = keepAliveAgent;
+    var keepAliveAgent = new http.Agent({ keepAlive: false,maxSockets:maxSockets });
+    options.agent = keepAliveAgent;
     var request = http.request(options, function(res) {
         if (res.statusCode === 200) {
             var result='';
@@ -98,6 +97,48 @@ exports.getMetadataByNodeId= function getMetadataByNodeId(nodeId,callback){
     });
 };
 
+exports.getMetadataByNodeIds= function getMetadataByNodeIds(nodeIdList,callback){
+
+    var body = JSON.stringify({
+        "nodeIds": nodeIdList,
+        "maxResults": 0
+    });
+    var options = {
+        hostname: alfHostName,
+        port: 80,
+        path: "/alfresco/service/api/solr/metadata",
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(body)
+        }
+    };
+    var keepAliveAgent = new http.Agent({ keepAlive: false,maxSockets:maxSockets });
+    options.agent = keepAliveAgent;
+    var request = http.request(options, function(res) {
+        if (res.statusCode === 200) {
+            var result='';
+            res.on('data', function (chunk) {
+                result+=chunk;
+            });
+            res.on('end', function() {
+                return callback(null,result);
+            });
+        }else if(res.statusCode === 500) {
+            return callback(new Error("no nodes in txns 500: "+nodeIdList[0]  ));
+        }else if(res.statusCode === 204) {
+            return callback(new Error("no nodes in txns 204: "+nodeIdList[0]  ));
+        }
+    }).on('error', function(e) {
+        return callback(new Error("Get metadata error: " +nodeIdList[0]+  "--"+e.message));
+    });
+    request.end(body);
+    request.setTimeout( 180000, function( ) {
+        logger.error("timeout: will abort,check if is large folder:"+nodeIdList.toString()  );
+        request.abort();
+    });
+};
+
 exports.getNodesByTxnId= function getNodesByTxnId(fromTxnId,toTxnId,callback){
 
     var body = JSON.stringify({
@@ -113,11 +154,10 @@ exports.getNodesByTxnId= function getNodesByTxnId(fromTxnId,toTxnId,callback){
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(body)
-        },
-        agent: false
+        }
     };
-    //var keepAliveAgent = new http.Agent({ keepAlive: true,maxSockets:maxSockets });
-    //options.agent = keepAliveAgent;
+    var keepAliveAgent = new http.Agent({ keepAlive: false,maxSockets:maxSockets });
+    options.agent = keepAliveAgent;
     var request = http.request(options, function(res) {
         if (res.statusCode === 200) {
             var result='';
@@ -151,12 +191,12 @@ exports.getTxnsByTime= function getTxnsByTime(fromCommitTime,toCommitTime,maxRes
         hostname: alfHostName,
         port: 80,
         path: alfURL,
-        method: 'GET',
-        agent: false
+        method: 'GET'//,
+        //agent: false
     };
 
-    //var keepAliveAgent = new http.Agent({ keepAlive: true,maxSockets:maxSockets });
-    //options.agent = keepAliveAgent;
+    var keepAliveAgent = new http.Agent({ keepAlive: false,maxSockets:maxSockets });
+    options.agent = keepAliveAgent;
 
     var request = http.get(options, function(res) {
         //logger.info("Got response: " + res.statusCode);
@@ -166,7 +206,6 @@ exports.getTxnsByTime= function getTxnsByTime(fromCommitTime,toCommitTime,maxRes
                 result+=chunk;
             });
             res.on('end', function() {
-
                 return callback(null,result);
             });
         }else if(res.statusCode === 500) {
@@ -190,17 +229,17 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
     //node=node.replace('"NCMS:','"');
     //node = node.replace(/"NCMS:/g, '"');
     var nodeJson = JSON.parse(node, function(key, value) {
-        if (value && typeof value === 'object')
-            for (var k in value) {
-                if(k=='cm:title'||k=='cm:modifier'||k=='cm:creator'
-                    ||k=='sys:locale'||k=='cm:content'||k=='sys:store-identifier'||k=='sys:store-protocol'){
-                    delete value[k];
-                }
-                else if (k.indexOf(':')>0 && Object.hasOwnProperty.call(value, k)) {
-                    value[k.replace(':','_')] = value[k];
-                    delete value[k];
-                }
-            }
+        //if (value && typeof value === 'object')
+            //for (var k in value) {
+            //    if(k=='cm:title'||k=='cm:modifier'||k=='cm:creator'
+            //        ||k=='sys:locale'||k=='cm:content'||k=='sys:store-identifier'||k=='sys:store-protocol'){
+            //        delete value[k];
+            //    }
+            //    else if (k.indexOf(':')>0 && Object.hasOwnProperty.call(value, k)) {
+            //        value[k.replace(':','_')] = value[k];
+            //        delete value[k];
+            //    }
+            //}
         return value;
     });
 

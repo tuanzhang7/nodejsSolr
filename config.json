@@ -1,6 +1,18 @@
 {
   "alfresco": {
     "host": "172.30.11.215",
-    "contentCachePath":"Z:/projects/CMSTools/content/"
+    "contentCachePath":"Z:/projects/CMSTools/content/",
+    "maxSockets":20,
+    "startDateDefault":"2016-04-13",
+    "indexCommitTimeInterval":"2",
+    "chunksSize":50,
+    "getMetadataThreads":15,
+    "maxTxnsResults":2000
+  },
+  "mongodb": {
+    "host": "172.30.11.195",
+    "port":"3306",
+    "db":"ncms",
+    "collection":"nodes"
   }
 }

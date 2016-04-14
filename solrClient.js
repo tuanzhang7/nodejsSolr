@@ -71,23 +71,3 @@ exports.getMaxTransactionId = function getMaxTransactionId(callback){
     });
 };
 
-function addMetadata(){
-    var docs = [];
-    for(var i = 0; i <= 1000 ; i++){
-        var doc = {
-            id : 12345 + i,
-            title_t : "Title "+ i,
-            description_t : "Text"+ i + "Alice"
-        };
-        docs.push(doc);
-    }
-
-// Add documents
-    client.add(docs,function(err,obj){
-        if(err){
-            console.log(err);
-        }else{
-            console.log(obj);
-        }
-    });
-}
