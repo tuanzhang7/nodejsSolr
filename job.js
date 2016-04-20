@@ -152,12 +152,14 @@ exports.indexMetadata = function indexMetadata(startTransId) {
     });
 };
 
-exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommitTime, callback) {
+exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommitTime,isFullIndex, callback) {
 
     var getMetadataThreads = options.getMetadataThreads || 6;
     var maxResults = options.maxResults || 500;
     var chunksSize = options.chunksSize || 100;
     var indexCommitTimeInterval = options.indexCommitTimeInterval || 2;
+    var TYPE = options.TYPE || "cm:content";
+
     if(typeof start==="undefined"){start=moment();}
     var finished=false;
 
@@ -199,7 +201,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                     }else{
 
                         var size=0;
-                        if(txnsSize>100000000){
+                        if(txnsSize>0){
                             async.series([
                                     function(callback){
                                         var workspaceArray=[];
@@ -238,7 +240,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                                                             for (var i = 0; i < metadata.nodes.length; i++) {
                                                                 var obj = metadata.nodes[i];
 
-                                                                if((obj.type=="NCMS:NCMSFields" )){//||obj.type=="cm:content"
+                                                                if((obj.type==TYPE  )){//||obj.type=="cm:content"
                                                                     //logger.info(metadata.nodes[0].id);
                                                                     var result=repoAlfresco.convertAlfNodeJson(JSON.stringify(obj));
 
@@ -272,21 +274,22 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                                                     });
                                                 }, function(done) {
                                                     //save to db
+                                                    var upsert=!isFullIndex;
                                                     if(workspaceArray&&workspaceArray.length>0){
-                                                        repo.bulkWrite(workspaceArray,"workspace",function(err,result){
+                                                        repo.bulkWrite(workspaceArray,"workspace",upsert,function(err,result){
                                                             if(err){
                                                                 logger.error('error bulk insert to workspace DB:'+err);
                                                             }
                                                         });
                                                     }
                                                     if(archiveArray&&archiveArray.length>0){
-                                                        repo.bulkWrite(archiveArray,"archive",function(err,result){
+                                                        repo.bulkWrite(archiveArray,"archive",upsert,function(err,result){
                                                             if(err){
                                                                 logger.error('error bulk insert to archive DB:'+err);
                                                             }
                                                         });
                                                     }
-                                                    repo.bulkWrite(txns.transactions,"transactions",function(err,result){
+                                                    repo.bulkWrite(txns.transactions,"transactions",false,function(err,result){
                                                         if(err){
                                                             logger.error('error bulk insert to transactions DB:'+err);
                                                         }

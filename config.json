@@ -1,18 +1,30 @@
 {
   "alfresco": {
-    "host": "172.30.11.215",
+    "host": "10.14.244.182",
     "contentCachePath":"Z:/projects/CMSTools/content/",
     "maxSockets":20,
-    "startDateDefault":"2016-04-13",
+    "startDateDefault":"2011-11-01",
     "indexCommitTimeInterval":"2",
     "chunksSize":50,
-    "getMetadataThreads":15,
-    "maxTxnsResults":2000
+    "getMetadataThreads":10,
+    "maxTxnsResults":1000,
+    "TYPE":"NCMS:NCMSFields"
   },
   "mongodb": {
     "host": "172.30.11.195",
     "port":"3306",
-    "db":"ncms",
-    "collection":"nodes"
+    "db":"cms"
+  },
+  "xml":{
+    "filterFields":[
+      "cm:name",
+      "cm:content",
+      "sys:*",
+      "cm:modified",
+      "cm:modifier",
+      "cm:created",
+      "cm:creator"
+    ],
+    "delimiter":"|"
   }
 }

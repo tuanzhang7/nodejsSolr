@@ -83,7 +83,7 @@ exports.getMetadataByNodeId= function getMetadataByNodeId(nodeId,callback){
                 return callback(null,result);
             });
         }else if(res.statusCode === 500) {
-            return callback(new Error("no nodes in txns 500: " +  nodeId));
+            return callback(new Error("Erro Code 500, no nodes in txns : " +  nodeId));
         }else if(res.statusCode === 204) {
             return callback(new Error("no nodes in txns 204: " +  nodeId));
         }
@@ -225,9 +225,6 @@ exports.getTxnsByTime= function getTxnsByTime(fromCommitTime,toCommitTime,maxRes
 };
 
 exports.convertAlfNodeJson= function convertAlfNodeJson(node){
-
-    //node=node.replace('"NCMS:','"');
-    //node = node.replace(/"NCMS:/g, '"');
     var nodeJson = JSON.parse(node, function(key, value) {
         //if (value && typeof value === 'object')
             //for (var k in value) {

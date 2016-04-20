@@ -1,0 +1,427 @@
+{
+  "nodes": [
+    {
+      "id": 13963492,
+      "tenantDomain": "",
+      "nodeRef": "workspace://SpacesStore/8516fc55-3639-4490-8c84-f3aaa55ab540",
+      "type": "NCMS:NCMSFields",
+      "aclId": 11,
+      "txnId": 1589118,
+      "properties": {
+        "facet:publisher": [
+          "World Scientific,"
+        ],
+        "cm:modified": "2015-01-22T11:37:51.932+08:00",
+        "NCMS:contributor": [
+          "LCNA:Lehnertz, K. (Klaus) ",
+          "LCNA:John von Neumann Institute for Computing. ",
+          "LCNA:Universität Bonn. Dept. of Epileptology. "
+        ],
+        "NCMS:Date_created_text_m": [
+          "c2000."
+        ],
+        "sys:node-uuid": "8516fc55-3639-4490-8c84-f3aaa55ab540",
+        "NCMS:CMSUUID": "b72800e3-30cc-458f-a67f-01958482ab34",
+        "facet:author": [
+          "Workshop on Chaos in Brain? (1999 : Bonn, Germany)"
+        ],
+        "NCMS:publisher_m": [
+          "Singapore ; River Edge, N.J. : World Scientific, "
+        ],
+        "NCMS:Dc_location": [
+          "616.8047547"
+        ],
+        "NCMS:title_alternative_m": [
+          "Chaos in brain?. "
+        ],
+        "sys:node-dbid": "13963492",
+        "NCMS:Format_extent_m": [
+          "x, 370 p. : ill. ; 26 cm. "
+        ],
+        "NCMS:Date_copyrighted_text": "c2000.",
+        "NCMS:Subject": [
+          "LCSH:Electroencephalography--Congresses. ",
+          "LCSH:Chaotic behavior in systems--Congresses. ",
+          "LCSH:Brain--Mathematical models--Congresses. ",
+          "LCSH:Time-series analysis--Congresses. ",
+          "LCSH:Nonlinear theories--Congresses. ",
+          "Brain--physiopathology--Congresses. ",
+          "Electroencephalography--Congresses. ",
+          "Nonlinear Dynamics--Congresses. "
+        ],
+        "cm:creator": "admin",
+        "NCMS:dc_type_m": [
+          "Language material, Monograph/Item"
+        ],
+        "facet:top_level": "Physical Resources",
+        "NCMS:title": "Workshop on Chaos in Brain? : NIC, Forschungszentrum Jülich and Dept. of Epileptology, University of Bonn, Germany, March 10-12, 1999 / edited by K. Lehnertz ... [et al.] ",
+        "cm:title": [
+          {
+            "locale": "en_",
+            "value": "Workshop on Chaos in Brain? : NIC, Forschungszentrum Jülich and Dept. of Epileptology, University of Bonn, Germany, March 10-12, 1999 / edited by K. Lehnertz ... [et al.] "
+          }
+        ],
+        "facet:subject": [
+          "Electroencephalography--Congresses.",
+          "Chaotic behavior in systems--Congresses.",
+          "Brain--Mathematical models--Congresses.",
+          "Time-series analysis--Congresses.",
+          "Nonlinear theories--Congresses.",
+          "Brain--physiopathology--Congresses.",
+          "Electroencephalography--Congresses.",
+          "Nonlinear Dynamics--Congresses."
+        ],
+        "facet:type": [
+          "Book"
+        ],
+        "sys:store-identifier": "SpacesStore",
+        "cm:content": {
+          "contentId": "12985839",
+          "encoding": "UTF-8",
+          "locale": "en_US_",
+          "mimetype": "application/marc",
+          "size": "2047"
+        },
+        "NCMS:userStatus": "Published",
+        "cm:name": "10693208.mrc",
+        "NCMS:Identifier": [
+          "UUID:b72800e3-30cc-458f-a67f-01958482ab34",
+          "NBN:2001M02029",
+          "ISBN:9810242220",
+          "SCN:(NLB)OLD0010693208",
+          "SCN:(SILAS)10693208",
+          "SCN:(OCoLC)44017051",
+          "SCN:(SNB)OLD0010693208",
+          "SCN:(PPA)OLD0000100822",
+          "SCN:(LD)100822",
+          "BRN:10693208"
+        ],
+        "sys:locale": "en_US_",
+        "sys:store-protocol": "workspace",
+        "facet:language": [
+          "English"
+        ],
+        "NCMS:description_m": [
+          "\"The workshop was organized by the John von Neumann Institute for Computing (NIC) at the Forschungszentrum Jülich and the Department of Epileptology of the Bonn University Medical Center\"--Preface. ",
+          "Includes bibliographical references. ",
+          "F200803. ",
+          "PPABOX429. "
+        ],
+        "NCMS:creator": [
+          "LCNA:Workshop on Chaos in Brain? (1999 : Bonn, Germany) "
+        ],
+        "cm:created": "2015-01-22T04:31:36.000+08:00",
+        "NCMS:dc_language_m": [
+          "_Languages:English {18349056}"
+        ],
+        "cm:modifier": "admin",
+        "facet:source": "LMS",
+        "NCMS:Date_issued_text": "2000"
+      },
+      "aspects": [
+        "cm:auditable",
+        "facet:facetFields",
+        "sys:referenceable",
+        "cm:titled",
+        "sys:localized"
+      ],
+      "paths": [
+        {
+          "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}OneSearch/{http://www.alfresco.org/model/content/1.0}Physical_Resources/{http://www.alfresco.org/model/content/1.0}LMS/{http://www.alfresco.org/model/content/1.0}_x0033_7/{http://www.alfresco.org/model/content/1.0}_x0031_0693208.mrc"
+        }
+      ],
+      "ancestors": [
+        "workspace://SpacesStore/fab9a923-8a7e-419b-a826-9d67beacaf2d",
+        "workspace://SpacesStore/d934dac5-25fd-49ba-95aa-5fbf4d50f944",
+        "workspace://SpacesStore/f4218395-85a8-405a-be63-090ef975c7b1",
+        "workspace://SpacesStore/ee6b7f37-963c-4e75-a1dd-53e32b5cb72a",
+        "workspace://SpacesStore/77caba36-4b0f-46bc-8af3-1cc97583f7e9",
+        "workspace://SpacesStore/89f8a924-54b8-45a9-8329-bc11d9a20fa2"
+      ],
+      "parentAssocs": [
+        "workspace://SpacesStore/77caba36-4b0f-46bc-8af3-1cc97583f7e9|workspace://SpacesStore/8516fc55-3639-4490-8c84-f3aaa55ab540|{http://www.alfresco.org/model/content/1.0}contains|{http://www.alfresco.org/model/content/1.0}10693208.mrc|true|-1"
+      ],
+      "parentAssocsCrc": 1001565582,
+      "owner": "admin"
+    },
+    {
+      "id": 70711,
+      "tenantDomain": "",
+      "nodeRef": "workspace://SpacesStore/3b8fd2df-2316-43ab-9744-f7bdae734f79",
+      "type": "NCMS:NCMSFields",
+      "aclId": 11,
+      "txnId": 270926,
+      "properties": {
+        "cm:modified": "2013-09-03T11:48:20.393+08:00",
+        "NCMS:editorial": "FCH 2006-08-31.FCH 2008-10-10- input additional LCSH & DL taxonomy terms for info discovery purposes.FCH 2009-09-07-updated URL as req.by email fr.Thomas Tan,DCD. CSS 2013-08-28 changed description per Thomas' 28 Aug 13 email. CSS 2013-09-03 changed description per Thomas' 2 Sep 13 email.",
+        "NCMS:CMSUUID": "77d7a00c-f377-4c8b-ac29-5620e89db1c7",
+        "sys:node-dbid": "70711",
+        "NCMS:Date_from_text": "",
+        "NCMS:Subject": [
+          "LCSH:Electronic encyclopedias",
+          "LCSH:Social sciences--Databases",
+          "LCSH:Arts--Databases",
+          "LCSH:Science--Databases",
+          "LCSH:Technology--Databases",
+          "LCSH:Information technology--Databases",
+          "LCSH:Humanities--Databases",
+          "LCSH:Sports--Databases",
+          "LCSH:Recreation—Databases",
+          "nlbdltx:Education",
+          "nlbdltx:Law and government",
+          "nlbdltx:Arts",
+          "nlbdltx:Health and medicine",
+          "nlbdltx:Philosophy, psychology and religion",
+          "nlbdltx:Business, finance and industry",
+          "nlbdltx:History>>Africa",
+          "nlbdltx:History>>Ancient world",
+          "nlbdltx:History>>Asia",
+          "nlbdltx:History>>Europe",
+          "nlbdltx:History>>North America",
+          "nlbdltx:History>>Other parts of the world",
+          "nlbdltx:People and communities",
+          "nlbdltx:Computers and information technology",
+          "nlbdltx:Science and technology",
+          "nlbdltx:Language and literature",
+          "nlbdltx:Sports, recreation and travel"
+        ],
+        "NCMS:Date_copyrighted_text": "2007",
+        "NCMS:Expicit": "",
+        "NCMS:dc_type_m": [
+          "nlbt:Database",
+          "DCMIType:Text"
+        ],
+        "NCMS:Date_submitted_text": null,
+        "NCMS:Dc_format_m": [
+          "text/html"
+        ],
+        "NCMS:rights_accessRights": "The information on this page and any images that appear here may be used for private research and study purposes only.  They may not be copied, altered or amended in any way without prior permission of the copyright holder.|",
+        "cm:title": [
+          {
+            "locale": "en_US_",
+            "value": "EBSCOHost Funk & Wagnall's new world encyclopedia"
+          }
+        ],
+        "NCMS:Date_to_text": "",
+        "NCMS:rights_policy_pid": "",
+        "NCMS:Date_available_text": "2006-08-31",
+        "sys:store-identifier": "SpacesStore",
+        "NCMS:dc_dcmiType_m": null,
+        "cm:content": {
+          "contentId": "70091",
+          "encoding": "UTF-8",
+          "locale": "en_US_",
+          "mimetype": "text/plain",
+          "size": "108"
+        },
+        "NCMS:Audience": "Adults|Young People|Children",
+        "NCMS:Date_modified_text": null,
+        "NCMS:userStatus": "Published",
+        "cm:name": "PID100850000003233.txt",
+        "NCMS:RemoteAccessType": "",
+        "sys:locale": "en_US_",
+        "NCMS:Right_license": null,
+        "cm:description": [
+          {
+            "locale": "en_US_",
+            "value": ""
+          }
+        ],
+        "cm:author": "",
+        "NCMS:dc_language_m": [
+          "eng"
+        ],
+        "NCMS:audience_mediator": null,
+        "cm:modifier": "admin",
+        "NCMS:DigitalisationID": "",
+        "sys:node-uuid": "3b8fd2df-2316-43ab-9744-f7bdae734f79",
+        "NCMS:Provenance": null,
+        "NCMS:Rights_rightsholder_m": [
+          "EBSCO Industries, Inc"
+        ],
+        "NCMS:publisher_m": [
+          "DigitalPublisher:EBSCO Industries, Inc"
+        ],
+        "NCMS:Edition": null,
+        "NCMS:audience_educationLevel": null,
+        "NCMS:title_alternative_m": [
+          "Funk & Wagnall's new world encyclopedia"
+        ],
+        "NCMS:Date_accepted_text": null,
+        "cm:creator": "admin",
+        "NCMS:title": "EBSCOHost Funk & Wagnall's new world encyclopedia",
+        "NCMS:InternalAccessType": "",
+        "NCMS:SecurityLevel": "",
+        "NCMS:websiteURI": "http://eresources.nlb.gov.sg/sitemap/EBSCOHost_Funk_~_Wagnall's_new_world_encyclopedia.aspx",
+        "NCMS:Date_issued": "2006-08-31T00:00:00.000+08:00",
+        "NCMS:Coverage": "",
+        "NCMS:Identifier": [
+          "PID:10085/0000003233",
+          "UUID:77d7a00c-f377-4c8b-ac29-5620e89db1c7",
+          "URI:http://search.ebscohost.com/login.aspx?authtype=ip,uid&group=remote&profile=ehost&defaultdb=funk"
+        ],
+        "NCMS:EditTemplate": "",
+        "sys:store-protocol": "workspace",
+        "NCMS:Incipit": "",
+        "NCMS:description_abstract_m": [
+          "For students and adults alike, the Funk & Wagnall's New Encyclopedia is a multidisciplinary encyclopedia that indexes over 25,000 records covering a variety of subject areas. Full text for each record may be easily accessed by double clicking on the topic from the display. The database contains various images, offers brief biographies as well as information in a variety of subject areas."
+        ],
+        "NCMS:Relation_isPartOf": [
+          "Collection:NLB Collections>>LKCRL Collections",
+          "Collection:NLB Collections>>E-Databases"
+        ],
+        "NCMS:description_m": [
+          "Available at all libraries and from home."
+        ],
+        "cm:created": "2012-03-01T16:24:25.000+08:00",
+        "NCMS:Dc_date_text": "",
+        "NCMS:rights": "All Rights Reserved. EBSCO Industries, Inc 2007.",
+        "NCMS:Date_issued_text": "2006-08-31"
+      },
+      "aspects": [
+        "cm:auditable",
+        "sys:referenceable",
+        "cm:titled",
+        "cm:author",
+        "sys:localized"
+      ],
+      "paths": [
+        {
+          "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}Deleted/{http://www.alfresco.org/model/content/1.0}PID100850000003233.txt"
+        }
+      ],
+      "ancestors": [
+        "workspace://SpacesStore/d934dac5-25fd-49ba-95aa-5fbf4d50f944",
+        "workspace://SpacesStore/f4218395-85a8-405a-be63-090ef975c7b1",
+        "workspace://SpacesStore/3163f665-fdf6-4348-b33b-86aec7f854cb"
+      ],
+      "parentAssocs": [
+        "workspace://SpacesStore/3163f665-fdf6-4348-b33b-86aec7f854cb|workspace://SpacesStore/3b8fd2df-2316-43ab-9744-f7bdae734f79|{http://www.alfresco.org/model/content/1.0}contains|{http://www.alfresco.org/model/content/1.0}PID100850000003233.txt|true|-1"
+      ],
+      "parentAssocsCrc": 1510069851,
+      "owner": "admin"
+    },
+    {
+      "id": 7774,
+      "tenantDomain": "",
+      "nodeRef": "workspace://SpacesStore/009496c6-846f-41a9-a05a-dbd5aa71517b",
+      "type": "NCMS:NCMSFields",
+      "aclId": 43,
+      "txnId": 1759994,
+      "properties": {
+        "cm:modified": "2015-04-28T14:45:51.480+08:00",
+        "NCMS:editorial": "Checked & updated 26 May 06 - amended collection statement.Title from home page (viewed on Jan. 12, 2006).  -- Retired content as reviewed and approved by user",
+        "sys:node-uuid": "009496c6-846f-41a9-a05a-dbd5aa71517b",
+        "NCMS:CMSUUID": "73613033-f097-4d76-a5a9-b7de53b23bb9",
+        "NCMS:IsWebsiteURIExist": "false",
+        "NCMS:title_alternative_m": [
+          "Flash-Med Review: a Quick Review of Relevant Medical Topics"
+        ],
+        "sys:node-dbid": "7774",
+        "NCMS:Subject": [
+          "LCSH:Medicine, Popular--Handbooks, nmanuals, etc.",
+          "LCSH:Health -- Handbooks, manuals, etc.",
+          "nlbdltx:Health and medicine>>Medication and therapies"
+        ],
+        "cm:creator": "admin",
+        "NCMS:dc_type_m": [
+          "nlbt:Website {18335747}",
+          "DCMIType:Text"
+        ],
+        "facet:top_level": "Digital Resources",
+        "NCMS:title": "Answers to medical questions",
+        "NCMS:Dc_format_m": [
+          "text/html"
+        ],
+        "NCMS:rights_accessRights": "The information on this page and any images that appear here may be used for private research and study purposes only. They may not be copied, altered or amended in any way without first gaining the permission of the copyright holder.",
+        "NCMS:Datecaptured": "2003-01-09",
+        "cm:title": [
+          {
+            "locale": "en_",
+            "value": "Answers to medical questions"
+          }
+        ],
+        "facet:subject": [
+          "Medicine, Popular--Handbooks, nmanuals, etc.",
+          "Health -- Handbooks, manuals, etc.",
+          "Health and medicine>>Medication and therapies"
+        ],
+        "facet:type": [
+          "Website"
+        ],
+        "sys:store-identifier": "SpacesStore",
+        "NCMS:dc_dcmiType_m": [
+          ""
+        ],
+        "facet:audience": [
+          "Adults",
+          "Young People"
+        ],
+        "cm:content": {
+          "contentId": "7178",
+          "encoding": "UTF-8",
+          "locale": "en_US_",
+          "mimetype": "text/plain",
+          "size": "25"
+        },
+        "NCMS:Audience": "Adults|Young People",
+        "NCMS:userStatus": "Archived",
+        "cm:name": "PID100850000004514.txt",
+        "NCMS:Identifier": [
+          "PID:10085/0000004514",
+          "UUID:73613033-f097-4d76-a5a9-b7de53b23bb9",
+          "URI:http://www.flash-med.com/"
+        ],
+        "sys:locale": "en_US_",
+        "sys:store-protocol": "workspace",
+        "NCMS:description_abstract_m": [
+          "Flash-Med Review is a site providing medical information in a question-answer format. It is an excellent resource to learn about and review relevant medical information, terms and conditions, whether common or uncommon. It is designed essentially for physicians, nurses, physician assistants, medical students and other medical professionals."
+        ],
+        "facet:collection": [
+          "LKCRL Collections",
+          "Science & Technology Collection"
+        ],
+        "NCMS:Relation_isPartOf": [
+          "Collection:NLB Collections>>LKCRL Collections>>Science & Technology Collection"
+        ],
+        "facet:language": [
+          "English"
+        ],
+        "NCMS:creator": [
+          "Vesta,Inc"
+        ],
+        "cm:created": "2012-03-02T17:23:19.000+08:00",
+        "NCMS:dc_language_m": [
+          "eng"
+        ],
+        "cm:modifier": "admin",
+        "facet:source": "NLB"
+      },
+      "aspects": [
+        "cm:auditable",
+        "facet:facetFields",
+        "sys:referenceable",
+        "cm:titled",
+        "sys:localized"
+      ],
+      "paths": [
+        {
+          "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}NLB_Project/{http://www.alfresco.org/model/content/1.0}GT/{http://www.alfresco.org/model/content/1.0}Others/{http://www.alfresco.org/model/content/1.0}batch2/{http://www.alfresco.org/model/content/1.0}PID100850000004514.txt"
+        }
+      ],
+      "ancestors": [
+        "workspace://SpacesStore/d934dac5-25fd-49ba-95aa-5fbf4d50f944",
+        "workspace://SpacesStore/8c362e98-1a23-47c6-a6fc-7086f80c1f3e",
+        "workspace://SpacesStore/f4218395-85a8-405a-be63-090ef975c7b1",
+        "workspace://SpacesStore/6921a2cf-6c68-4c96-8b64-e16370c70116",
+        "workspace://SpacesStore/309a9630-eaf0-403d-ab79-c646a18b0464",
+        "workspace://SpacesStore/e568f4c8-b0e1-44d1-bb17-783c94325f2e"
+      ],
+      "parentAssocs": [
+        "workspace://SpacesStore/309a9630-eaf0-403d-ab79-c646a18b0464|workspace://SpacesStore/009496c6-846f-41a9-a05a-dbd5aa71517b|{http://www.alfresco.org/model/content/1.0}contains|{http://www.alfresco.org/model/content/1.0}PID100850000004514.txt|true|-1"
+      ],
+      "parentAssocsCrc": 3489268414,
+      "owner": "admin"
+    }
+  ]
+}
