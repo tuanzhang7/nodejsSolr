@@ -1,7 +1,6 @@
-/**
- * Created by user1 on 18/11/2015.
- */
+
 var logger = require('./log.js').logger;
+var utlity=require('./utility.js');
 var MongoClient = require('mongodb').MongoClient;
 var config = require('./config.json');
 var host = config.mongodb.host;
@@ -9,7 +8,8 @@ var port = config.mongodb.port;
 var db = config.mongodb.db;
 //var collection=config.mongodb.collection;
 var async = require('async');
-
+var fs = require('fs');
+var _ = require('underscore');
 var url = 'mongodb://' + host + ':' + port + '/' + db;
 
 
@@ -227,10 +227,81 @@ exports.createIndexs = function createIndexs(callback) {
                         }
                     );
                 },
+                function (callback) {
+                    db.collection('workspace').createIndex(
+                        {"id":1,"PATH": 1}, null, function (err, results) {
+                            console.log(results);
+                            callback(null);
+                        }
+                    );
+                }
             ],
 // optional callback
             function (err, results) {
                 callback()
             });
+    });
+};
+
+exports.dumpByPath = function(path,callback) {
+    logger.info('dumpByPath:'+path);
+    MongoClient.connect(url, function (err, db) {
+        var workspace = db.collection('workspace');
+        
+        var projection = {_id: 0};
+        var sort = {id: 1};
+
+        var finished=false;
+        var maxId=0;
+        var counter=0;
+        async.whilst(
+            function () { return !finished; },
+            function (callback) {
+                var query = {PATH:{ '$regex': '^'+path }, "id" : { "$gt" : maxId } };
+                logger.info(query);
+                workspace.find(query, projection).sort(sort).limit(1000).toArray(function (err, docs) {
+                    if(docs!=null&& docs.length>0){
+                        maxId=_.max(docs, function(d){ return d.id; }).id;
+                        logger.info('maxId:'+maxId+ ' counter:'+counter);
+                        
+                        counter+=docs.length;
+                        if(maxId!=undefined){
+                            docs.forEach(function (doc) {
+                                var path=utlity.convertAlfPath2Path(doc.PATH);
+                                fs.exists(path, function (exists) {
+                                    if(exists){
+                                        logger.info("file exist:"+ path);
+                                    }
+                                    else{
+                                        if (fs.existsSync(path)===false) {
+                                            fs.mkdirSync(path);
+                                        }
+                                        fs.writeFile(fileName, data2, function(err) {
+                                            if(err) {
+                                                return logger.error(err);
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        }
+                        else{
+                            logger.info('could not get maxid');
+                            finished=true;
+                        }
+                        callback();
+                    }
+                    else{
+                        logger.info('total counter:'+counter);
+                        finished=true;
+                        callback();
+                    }
+                });
+            },
+            function (err, n) {
+                db.close();
+                callback();
+            }
+        );
     });
 };

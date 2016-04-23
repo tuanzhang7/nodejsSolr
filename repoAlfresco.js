@@ -1,10 +1,8 @@
-/**
- * Created by user1 on 18/11/2015.
- */
+
 var http = require('http');
 var logger=require('./log.js').logger;
-var escapeStringRegexp = require('escape-string-regexp');
 var config = require('./config.json');
+var utlity=require('./utility.js');
 
 var alfHostName=config.alfresco.host;//"localhost";//"ncmsr.nlb.gov.sg";//"10.14.244.84";
 var maxSockets=config.alfresco.maxSockets;
@@ -242,7 +240,7 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
 
     //var nodeJson=JSON.parse(node)
     var obj=nodeJson.properties;
-    obj.PATH=formatAlfPath(nodeJson.paths[0].path);
+    obj.PATH=utlity.formatAlfPath(nodeJson.paths[0].path);
     obj.id=nodeJson.id;
     obj.txnId=nodeJson.txnId;
 
@@ -254,21 +252,3 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
     return obj;
 };
 
-function formatAlfPath(alfPath){
-    var regCm = new RegExp(escapeStringRegexp('{http://www.alfresco.org/model/content/1.0}'),'g');
-    var regApp = new RegExp(escapeStringRegexp('{http://www.alfresco.org/model/application/1.0}'),'g');
-
-    return alfPath.replace(regCm,'cm:')
-        .replace(regApp,'app:');
-}
-
-function formatBytes(bytes,decimals) {
-    if(bytes == 0) return '0 Byte';
-    var k = 1000;
-    var dm = decimals + 1 || 3;
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    var i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
-}
-
-exports.__formatAlfPath=formatAlfPath;

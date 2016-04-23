@@ -125,7 +125,21 @@ function processSelection(select,callback){
             });
             //job.indexMetadata(startId);
             break;
-
+        case "5":
+            console.log('Dump metadata by path .e.g /app:company_home/cm:site1/cm:folder1');
+            prompt.get(['path'], function (err, result) {
+                path = result.path;
+                if(!path){
+                    console.log('Path should not blank');
+                    callback(null);
+                }
+                else{
+                    repoMongoDB.dumpByPath(path,function(){
+                        callback();
+                    });
+                }
+            });
+            break;
         case "q":
             console.log('exit......');
             callback();

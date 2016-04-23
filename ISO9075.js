@@ -1,6 +1,3 @@
-/**
- * Created by tuanzhang on 20/4/2016.
- */
 
 function decode(toDecode)
 {

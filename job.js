@@ -1,6 +1,4 @@
-/**
- * Created by user1 on 25/11/2015.
- */
+
 var _ = require('underscore');
 var async = require('async');
 var moment= require('moment');

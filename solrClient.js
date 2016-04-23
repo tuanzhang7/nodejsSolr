@@ -1,6 +1,4 @@
-/**
- * Created by user1 on 18/11/2015.
- */
+
 var solr = require('solr-client');
 var logger=require('./log.js').logger;
 
