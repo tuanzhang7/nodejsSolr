@@ -16,10 +16,10 @@ var finished=false;
 async.whilst(
     function () { return !finished; },
     function (callback) {
-        printMenu()
+        printMenu();
         prompt.get(['task'], function (err, result) {
-            selection = result.task;
-            if(selection == "q"){
+            var selection = result.task;
+            if(selection === "q"){
                 finished = true;
                 callback(null);
             }
@@ -126,15 +126,25 @@ function processSelection(select,callback){
             //job.indexMetadata(startId);
             break;
         case "5":
-            console.log('Dump metadata by path .e.g /app:company_home/cm:site1/cm:folder1');
-            prompt.get(['path'], function (err, result) {
-                path = result.path;
-                if(!path){
+            var prompt_dumpPath = {
+                name: 'dumpPath',
+                message: 'dump xml to path',
+                required: true
+            };
+            var prompt_alfpath = {
+                name: 'alfpath',
+                message: 'Dump metadata by path .e.g /app:company_home/cm:site1/cm:folder1',
+                required: true
+            };
+            prompt.get([prompt_alfpath,prompt_dumpPath], function (err, result) {
+                var alfpath = result.alfpath;
+                var dumpPath = result.dumpPath;
+                if(!alfpath){
                     console.log('Path should not blank');
                     callback(null);
                 }
                 else{
-                    repoMongoDB.dumpByPath(path,function(){
+                    repoMongoDB.dumpByPath(alfpath,dumpPath,function(){
                         callback();
                     });
                 }

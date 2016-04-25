@@ -1,6 +1,7 @@
 
 var logger = require('./log.js').logger;
-var utlity=require('./utility.js');
+var utility=require('./utility.js');
+var xmlhelper =require('./xmlhelper.js');
 var MongoClient = require('mongodb').MongoClient;
 var config = require('./config.json');
 var host = config.mongodb.host;
@@ -10,10 +11,11 @@ var db = config.mongodb.db;
 var async = require('async');
 var fs = require('fs');
 var _ = require('underscore');
+var path=require('path');
+var mkdirp = require('mkdirp');
 var url = 'mongodb://' + host + ':' + port + '/' + db;
 
 
-var _ = require('underscore');
 //"text/html"
 exports.getNodeIdByMimeType = function getDataByMimeType(mimeType, startId, size, callback) {
     MongoClient.connect(url, function (err, db) {
@@ -129,7 +131,7 @@ exports.getBatchTransactionIds = function getBatchTransactionIds(startTransId, c
         });
     });
 
-}
+};
 
 exports.bulkWrite = function bulkWrite(docs, collection,upsert, callback) {
     //logger.info('url:'+url+' collection:'+collection);
@@ -177,7 +179,7 @@ exports.getMaxTxnTime = function getMaxTxnTime(callback) {
         var sort = {commitTimeMs: -1};
         cmsnodes.find(query, projection).sort(sort).limit(1).toArray(function (err, docs) {
             console.log(docs);
-            maxTxnTime = docs[0].commitTimeMs;
+            var maxTxnTime = docs[0].commitTimeMs;
             db.close();
             return callback(maxTxnTime);
         });
@@ -238,13 +240,18 @@ exports.createIndexs = function createIndexs(callback) {
             ],
 // optional callback
             function (err, results) {
-                callback()
+                callback();
             });
     });
 };
 
-exports.dumpByPath = function(path,callback) {
-    logger.info('dumpByPath:'+path);
+exports.dumpByPath = function(alfpath,dumpPath,callback) {
+    if(fs.existsSync(dumpPath)=== false){
+        logger.info('dumpPath not exist:'+dumpPath);
+        callback();
+    }
+    //logger.info('dumpByPath:'+alfpath);
+    console.time("dumpByPath");
     MongoClient.connect(url, function (err, db) {
         var workspace = db.collection('workspace');
         
@@ -254,33 +261,32 @@ exports.dumpByPath = function(path,callback) {
         var finished=false;
         var maxId=0;
         var counter=0;
+
         async.whilst(
             function () { return !finished; },
             function (callback) {
-                var query = {PATH:{ '$regex': '^'+path }, "id" : { "$gt" : maxId } };
-                logger.info(query);
+                var query = {PATH:{ '$regex': '^'+alfpath }, "id" : { "$gt" : maxId } };
+                //logger.info(query);
                 workspace.find(query, projection).sort(sort).limit(1000).toArray(function (err, docs) {
-                    if(docs!=null&& docs.length>0){
+                    if(docs!== null&& docs.length>0){
                         maxId=_.max(docs, function(d){ return d.id; }).id;
                         logger.info('maxId:'+maxId+ ' counter:'+counter);
                         
                         counter+=docs.length;
-                        if(maxId!=undefined){
+                        if(maxId!== undefined){
                             docs.forEach(function (doc) {
-                                var path=utlity.convertAlfPath2Path(doc.PATH);
-                                fs.exists(path, function (exists) {
-                                    if(exists){
-                                        logger.info("file exist:"+ path);
-                                    }
-                                    else{
-                                        if (fs.existsSync(path)===false) {
-                                            fs.mkdirSync(path);
-                                        }
-                                        fs.writeFile(fileName, data2, function(err) {
-                                            if(err) {
-                                                return logger.error(err);
-                                            }
-                                        });
+                                var relpath=utility.convertAlfPath2Path(doc.PATH);
+                                var xmlFile=utility.getMetadataFileName(relpath);
+                                var fullpath=path.join(dumpPath,xmlFile);
+                                var dir = path.dirname(fullpath);
+                                var xml=xmlhelper.getMetadataXML(doc);
+                                logger.debug(xml);
+                                if (fs.existsSync(dir)===false) {
+                                    mkdirp.sync(dir);
+                                }
+                                fs.writeFile(fullpath, xml,'utf8', function(err) {
+                                    if(err) {
+                                        return logger.error("writeFileError:"+ err);
                                     }
                                 });
                             });
@@ -300,6 +306,7 @@ exports.dumpByPath = function(path,callback) {
             },
             function (err, n) {
                 db.close();
+                console.timeEnd("dumpByPath");
                 callback();
             }
         );

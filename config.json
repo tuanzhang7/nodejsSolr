@@ -8,7 +8,8 @@
     "chunksSize":50,
     "getMetadataThreads":10,
     "maxTxnsResults":1000,
-    "TYPE":"NCMS:NCMSFields"
+    "TYPE":"NCMS:NCMSFields",
+    "BulkImportDelimiter":","
   },
   "mongodb": {
     "host": "localhost",
@@ -16,15 +17,18 @@
     "db":"cms"
   },
   "xml":{
-    "filterFields":[
+    "excludeFields":[
       "cm:name",
       "cm:content",
-      "sys:*",
-      "cm:modified",
       "cm:modifier",
       "cm:created",
-      "cm:creator"
+      "cm:creator",
+      "PATH",
+      "id",
+      "txnId",
+      "_id"
+
     ],
-    "delimiter":"|"
+    "delimiter":","
   }
 }

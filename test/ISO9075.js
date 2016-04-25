@@ -11,6 +11,12 @@ describe('ISO9075', function() {
             assert.equal('/app:company_home/cm:NLB_Project/cm:BookSG/cm:eBooks/cm:type1/cm:20140120 DU_R657/cm:B26074919E.pdf',
                 result);
         });
+        it('_x but not Hex', function () {
+            var result=ISO9075.decode("/app:company_home/cm:NLB_Project/cm:BookSG/cm:eBooks/cm:type1/cm:_x00DU_R657/cm:B26074919E.pdf");
+
+            assert.equal('/app:company_home/cm:NLB_Project/cm:BookSG/cm:eBooks/cm:type1/cm:_x00DU_R657/cm:B26074919E.pdf',
+                result);
+        });
         it('null value', function () {
             var result=ISO9075.decode("");
 

@@ -23,6 +23,21 @@ function formatBytes(bytes,decimals) {
     var i = Math.floor(Math.log(bytes) / Math.log(k));
     return (bytes / Math.pow(k, i)).toPrecision(dm) + ' ' + sizes[i];
 }
+exports.chunk=function chunk (arr, len) {
+
+    var chunks = [],
+        i = 0,
+        n = arr.length;
+
+    while (i < n) {
+        chunks.push(arr.slice(i, i += len));
+    }
+
+    return chunks;
+}
+exports.getMetadataFileName=function (filename) {
+    return filename+".metadata.properties.xml";
+}
 exports.convertAlfPath2Path=convertAlfPath2Path;
 exports.formatAlfPath=formatAlfPath;
 exports.formatBytes=formatBytes;

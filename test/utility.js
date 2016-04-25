@@ -24,6 +24,16 @@ describe('repoAlfresco', function() {
         });
 
     });
+    describe('#getMetadataFileName()', function () {
+        it('filename', function () {
+            var result=utility.getMetadataFileName("B26074919E.pdf");
+            assert.equal( 'B26074919E.pdf.metadata.properties.xml',result);
+        });
+        it('path', function () {
+            var result=utility.getMetadataFileName("/company_home/NLB_Project/BookSG/eBooks/type1/_x0032_0140120_x0020_DU_R657/B26074919E.pdf");
+            assert.equal( '/company_home/NLB_Project/BookSG/eBooks/type1/_x0032_0140120_x0020_DU_R657/B26074919E.pdf.metadata.properties.xml',result);
+        });
+    });
     describe('#formatBytes()', function () {
 
         it('bytes', function () {

@@ -14,11 +14,11 @@ var middle=moment();
 var saveDirectory=configs.alfresco.contentCachePath;
 
 var counter=0;
-var txnsCounter=0
+var txnsCounter=0;
 
 exports.indexContent = function indexContent(cursor,mimeType,size) {
     repo.getNodeIdByMimeType(mimeType,cursor,size, function (data) {
-        logger.info('processing:'+startId);
+        logger.info('processing:');
         //if(counter>=1000){
         //    stopWatch(start,counter);
         //    return;
@@ -387,15 +387,4 @@ function stopWatch(start,counter){
     logger.info("total:"+counter+" time used:"+duration+"ms"+" speed: "+speed +"/seconds");
 }
 
-function chunk (arr, len) {
 
-    var chunks = [],
-        i = 0,
-        n = arr.length;
-
-    while (i < n) {
-        chunks.push(arr.slice(i, i += len));
-    }
-
-    return chunks;
-}

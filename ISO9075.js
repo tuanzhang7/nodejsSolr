@@ -25,11 +25,11 @@ function decode(toDecode)
 
 function matchesEncodedPattern(string, position)
 {
-    return (string.length > position + 6)
-        && (string.charAt(position) == '_') && (string.charAt(position + 1) == 'x')
-        && isHexChar(string.charAt(position + 2)) && isHexChar(string.charAt(position + 3))
-        && isHexChar(string.charAt(position + 4)) && isHexChar(string.charAt(position + 5))
-        && (string.charAt(position + 6) == '_');
+    return (string.length > position + 6) &&
+         (string.charAt(position) == '_') && (string.charAt(position + 1) == 'x')&&
+         isHexChar(string.charAt(position + 2)) && isHexChar(string.charAt(position + 3))&&
+         isHexChar(string.charAt(position + 4)) && isHexChar(string.charAt(position + 5))&&
+         (string.charAt(position + 6) == '_');
 }
 function isHexChar(c)
 {
