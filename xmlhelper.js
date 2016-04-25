@@ -7,8 +7,8 @@ exports.getMetadataXML=function (doc) {
     var xml = builder.create('properties')
         .dec({ version: '1.0', encoding: 'UTF-8' });
     //;
-    var type=doc.type;
-    xml.ele('entry',{'key': 'type'},type);
+    //var type=doc.type;
+    //xml.ele('entry',{'key': 'type'},type);
     //console.log('doc.properties:'+doc);
 
     var aspects=this.getAspects(doc.aspects);

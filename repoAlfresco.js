@@ -243,7 +243,9 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
     obj.PATH=utlity.formatAlfPath(nodeJson.paths[0].path);
     obj.id=nodeJson.id;
     obj.txnId=nodeJson.txnId;
-
+    obj.type=nodeJson.type;
+    obj.nodeRef=nodeJson.nodeRef;
+    obj.aspects=nodeJson.aspects;
     //logger.info(JSON.stringify(obj));
     //delete obj["cm_title"];
     //delete obj["cm_modifier"];

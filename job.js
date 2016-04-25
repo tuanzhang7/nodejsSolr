@@ -8,6 +8,7 @@ var repo = require('./repoMongoDB');
 var repoAlfresco = require('./repoAlfresco');
 var logger=require('./log.js').logger;
 var configs = require('./config.json');
+var utility=require('./utility.js');
 
 var start;
 var middle=moment();
@@ -201,169 +202,126 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                         var size=0;
                         if(txnsSize>0){
                             async.series([
-                                    function(callback){
-                                        var workspaceArray=[];
-                                        var archiveArray=[];
-                                        //txns id and commitTimeMS not in same order in some case
-                                        //var firstTxnId=txns.transactions[0].id;
-                                        //var lastTxnId=txns.transactions[txns.transactions.length-1].id;
+                                function(callback){
+                                    var workspaceArray=[];
+                                    var archiveArray=[];
+                                    //txns id and commitTimeMS not in same order in some case
+                                    //var firstTxnId=txns.transactions[0].id;
+                                    //var lastTxnId=txns.transactions[txns.transactions.length-1].id;
 
-                                        var firstTxnId =_.min(txns.transactions, function(t){ return t.id; }).id;
-                                        var lastTxnId =_.max(txns.transactions, function(t){ return t.id; }).id;
+                                    var firstTxnId =_.min(txns.transactions, function(t){ return t.id; }).id;
+                                    var lastTxnId =_.max(txns.transactions, function(t){ return t.id; }).id;
 
-                                        repoAlfresco.getNodesByTxnId(firstTxnId,lastTxnId, function (err,nodesResult) {
-                                            if(err){
-                                                logger.error('getNodesByTxnId error', err);
-                                                callback();
-                                            }
-                                            else if(nodesResult){
-                                                var nodesArray=JSON.parse(nodesResult).nodes;
-                                                size+=nodesArray.length;
-                                                var nodeIdList=_.pluck(nodesArray, 'id');
-                                                //logger.info("txns from-to:"+firstTxnId+"-"+lastTxnId);
-                                                //callback();
-                                                //_.sortBy(nodesArray.nodes, 'txnId').forEach(function(node) {
-                                                //    logger.info(" txnsId:"+node.txnId+ " nodesId:"+node.id);
-                                                //});
-                                                var chunks=chunk(nodeIdList,chunksSize);
-                                                async.eachLimit(chunks,getMetadataThreads, function (chunkArray,callback) {
-                                                    repoAlfresco.getMetadataByNodeIds(chunkArray, function (err,data2) {
-                                                        if(err){
-                                                            logger.error('getMetadataByNodeIds error', err);
-                                                            callback();
-                                                        }
-                                                        else if(data2){
-                                                            var metadata=JSON.parse(data2);
+                                    repoAlfresco.getNodesByTxnId(firstTxnId,lastTxnId, function (err,nodesResult) {
+                                        if(err){
+                                            logger.error('getNodesByTxnId error', err);
+                                            callback();
+                                        }
+                                        else if(nodesResult){
+                                            var nodesArray=JSON.parse(nodesResult).nodes;
+                                            size+=nodesArray.length;
+                                            var nodeIdList=_.pluck(nodesArray, 'id');
+                                            //logger.info("txns from-to:"+firstTxnId+"-"+lastTxnId);
+                                            //callback();
+                                            //_.sortBy(nodesArray.nodes, 'txnId').forEach(function(node) {
+                                            //    logger.info(" txnsId:"+node.txnId+ " nodesId:"+node.id);
+                                            //});
+                                            var chunks=utility.chunk(nodeIdList,chunksSize);
+                                            async.eachLimit(chunks,getMetadataThreads, function (chunkArray,callback) {
+                                                repoAlfresco.getMetadataByNodeIds(chunkArray, function (err,data2) {
+                                                    if(err){
+                                                        logger.error('getMetadataByNodeIds error', err);
+                                                        callback();
+                                                    }
+                                                    else if(data2){
+                                                        var metadata=JSON.parse(data2);
 
-                                                            for (var i = 0; i < metadata.nodes.length; i++) {
-                                                                var obj = metadata.nodes[i];
+                                                        for (var i = 0; i < metadata.nodes.length; i++) {
+                                                            var obj = metadata.nodes[i];
 
-                                                                if((obj.type==TYPE  )){//||obj.type=="cm:content"
-                                                                    //logger.info(metadata.nodes[0].id);
-                                                                    var result=repoAlfresco.convertAlfNodeJson(JSON.stringify(obj));
+                                                            if((obj.type==TYPE  )){//||obj.type=="cm:content"
+                                                                //logger.info(metadata.nodes[0].id);
+                                                                var result=repoAlfresco.convertAlfNodeJson(JSON.stringify(obj));
 
-                                                                    if(obj.properties["sys:store-protocol"]=="workspace" ){
-                                                                        workspaceArray.push(result);
-                                                                    }
-                                                                    if(obj.properties["sys:store-protocol"]=="archive" ){
-                                                                        archiveArray.push(result);
-                                                                    }
+                                                                if(obj.properties["sys:store-protocol"]=="workspace" ){
+                                                                    workspaceArray.push(result);
                                                                 }
-                                                                else{
-                                                                    //logger.info("Other Type:"+ metadata.nodes[0].type);
+                                                                if(obj.properties["sys:store-protocol"]=="archive" ){
+                                                                    archiveArray.push(result);
                                                                 }
                                                             }
-                                                            //logger.info("solr indexed:"+updateArray.length+
-                                                            //    " lastTxnId:"+lastTxnId+ " ("+moment(toCommitTime).format()+")");
-                                                            //solrClient.updateContents(updateArray,function (err) {
-                                                            //    if (err) throw err;
-                                                            //    callback();
-                                                            //});
-
-
-
-                                                            callback();
+                                                            else{
+                                                                //logger.info("Other Type:"+ metadata.nodes[0].type);
+                                                            }
                                                         }
-                                                        else{
-                                                            logger.info("No Metadata ??:"+nodesArray);
-                                                            callback();
+                                                        //logger.info("solr indexed:"+updateArray.length+
+                                                        //    " lastTxnId:"+lastTxnId+ " ("+moment(toCommitTime).format()+")");
+                                                        //solrClient.updateContents(updateArray,function (err) {
+                                                        //    if (err) throw err;
+                                                        //    callback();
+                                                        //});
+                                                        callback();
+                                                    }
+                                                    else{
+                                                        logger.info("No Metadata ??:"+nodesArray);
+                                                        callback();
+                                                    }
+                                                    //callback();
+                                                });
+                                            }, function(done) {
+                                                //save to db
+                                                var upsert=!isFullIndex;
+                                                async.series([
+                                                    function(callback){
+                                                        if(workspaceArray&&workspaceArray.length>0){
+                                                            repo.bulkWrite(workspaceArray,"workspace",upsert,function(err,result){
+                                                                if(err){
+                                                                    logger.error('error bulk insert to workspace DB:'+err);
+                                                                }
+                                                            });
                                                         }
-                                                        //callback();
-                                                    });
-                                                }, function(done) {
-                                                    //save to db
-                                                    var upsert=!isFullIndex;
-                                                    if(workspaceArray&&workspaceArray.length>0){
-                                                        repo.bulkWrite(workspaceArray,"workspace",upsert,function(err,result){
+                                                    },
+                                                    function(callback){
+                                                        if(archiveArray&&archiveArray.length>0){
+                                                            repo.bulkWrite(archiveArray,"archive",upsert,function(err,result){
+                                                                if(err){
+                                                                    logger.error('error bulk insert to archive DB:'+err);
+                                                                }
+                                                            });
+                                                        }
+                                                    }
+                                                    ,
+                                                    function(callback){
+                                                        repo.bulkWrite(txns.transactions,"transactions",false,function(err,result){
                                                             if(err){
-                                                                logger.error('error bulk insert to workspace DB:'+err);
+                                                                logger.error('error bulk insert to transactions DB:'+err);
                                                             }
                                                         });
                                                     }
-                                                    if(archiveArray&&archiveArray.length>0){
-                                                        repo.bulkWrite(archiveArray,"archive",upsert,function(err,result){
-                                                            if(err){
-                                                                logger.error('error bulk insert to archive DB:'+err);
-                                                            }
-                                                        });
-                                                    }
-                                                    repo.bulkWrite(txns.transactions,"transactions",false,function(err,result){
-                                                        if(err){
-                                                            logger.error('error bulk insert to transactions DB:'+err);
-                                                        }
-                                                    });
+                                                ],
+                                                function(err, results){
                                                     callback();
                                                 });
-
-                                            }
-                                            else{
-                                                callback();
-                                            }
-
-                                        });
-                                        //Performance not that good
-                                        //async.eachLimit(txns.transactions,1, function (transaction,callback) {
-                                        //    if(transaction.updates>0){
-                                        //        repoAlfresco.getNodesByTxnId(transaction.id,transaction.id, function (nodesResult) {
-                                        //            var nodesArray=JSON.parse(nodesResult);
-                                        //            size+=nodesArray.nodes.length;
-                                        //
-                                        //            nodesArray.nodes.forEach(function(node) {
-                                        //                logger.info(" txnsId:"+node.txnId+ " nodesId:"+node.id);
-                                        //            });
-                                        //
-                                        //            //logger.info("transaction.id:"+transaction.id+ " contains nodes:"+nodesArray.nodes.length);
-                                        //
-                                        //            //async.eachLimit(nodesArray,5, function (node,callback) {
-                                        //            //    repoAlfresco.getMetadataByNodeId(node.id, function (data2) {
-                                        //            //        //logger.info("got file from alf:"+nodeId);
-                                        //            //        if(data2){
-                                        //            //            //solrClient.updateContent(nodeId,data2, function (err) {
-                                        //            //            //    if (err) throw err;
-                                        //            //            //    callback();
-                                        //            //            //});
-                                        //            //            updateArray.push(data2);
-                                        //            //            callback();
-                                        //            //        }
-                                        //            //        else{
-                                        //            //            callback();
-                                        //            //        }
-                                        //            //    });
-                                        //            //}, function(done) {
-                                        //            //    callback();
-                                        //            //});
-                                        //            callback()
-                                        //        });
-                                        //    }
-                                        //    else{
-                                        //        callback();
-                                        //    }
-                                        //}, function(done) {
-                                        //    console.log("solr indexed:"+updateArray.length);
-                                        //    //too large for 500 pdf files
-                                        //    //solrClient.updateContents(updateArray,function (err) {
-                                        //    //    if (err) throw err;
-                                        //    //    callback();
-                                        //    //});
-                                        //
-                                        //    callback();
-                                        //});
-                                    }
-                                ],
-                                function(err, results){
-                                    counter+=size;
-                                    stopWatch(middle,size);
-                                    middle=moment().valueOf();
-                                    //indexMetadataFromAlf(options,toCommitTime,function(){});
-                                    callback(null)
+                                            });
+                                        }
+                                        else{
+                                            callback();
+                                        }
+                                    });
                                 }
-                            );
+                            ],
+                            function(err, results){
+                                counter+=size;
+                                stopWatch(middle,size);
+                                middle=moment().valueOf();
+                                //indexMetadataFromAlf(options,toCommitTime,function(){});
+                                callback(null)
+                            });
                         }
                         else{
                             //indexMetadataFromAlf(options,toCommitTime,function(){});
                             callback(null)
                         }
-
                     }
                 }
             });
@@ -373,11 +331,6 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
             callback()
         }
     );
-
-
-
-
-
 };
 
 function stopWatch(start,counter){

@@ -1,15 +1,22 @@
-﻿var prompt = require('prompt');
+﻿console.time("loading-requireds");
+var prompt = require('prompt');
 var moment= require('moment');
-var repoAlfresco = require('./repoAlfresco');
-var solrClient = require('./solrClient');
+var async = require('async');
+var readlineSync = require('readline-sync');
+
+console.time("loading-requireds-local");
+//var solrClient = require('./solrClient');
 var logger=require('./log.js').logger;
 var job=require('./job.js');
 var repoMongoDB = require('./repoMongoDB');
-var readlineSync = require('readline-sync');
 var config = require('./config.json');
-var async = require('async');
+console.timeEnd("loading-requireds-local");
 
+console.timeEnd("loading-requireds");
+
+console.time("prompt-start");
 prompt.start();
+console.timeEnd("prompt-start");
 
 //loop();
 var finished=false;
@@ -50,6 +57,22 @@ function printMenu(){
     console.log(' ');
     console.log('q. Quit');
 }
+function getOption(){
+    var indexCommitTimeInterval=config.alfresco.indexCommitTimeInterval;
+    var chunksSize=config.alfresco.chunksSize;
+    var getMetadataThreads=config.alfresco.getMetadataThreads;
+    var maxTxnsResults=config.alfresco.maxTxnsResults;
+    var TYPE=config.alfresco.TYPE;
+
+    var options={
+        getMetadataThreads:getMetadataThreads,
+        maxResults:maxTxnsResults,
+        indexCommitTimeInterval:indexCommitTimeInterval,
+        chunksSize:chunksSize,
+        TYPE:TYPE
+    };
+    return options;
+}
 function processSelection(select,callback){
     switch(select)
     {
@@ -80,19 +103,7 @@ function processSelection(select,callback){
             });
             break;
         case "3":
-            var indexCommitTimeInterval=config.alfresco.indexCommitTimeInterval;
-            var chunksSize=config.alfresco.chunksSize;
-            var getMetadataThreads=config.alfresco.getMetadataThreads;
-            var maxTxnsResults=config.alfresco.maxTxnsResults;
-            var TYPE=config.alfresco.TYPE;
-
-            var options={
-                getMetadataThreads:getMetadataThreads,
-                maxResults:maxTxnsResults,
-                indexCommitTimeInterval:indexCommitTimeInterval,
-                chunksSize:chunksSize,
-                TYPE:TYPE
-            };
+            var options=getOption();
             console.log('Index Metadata from alf Host:'+config.alfresco.host);
 
             var fromCommitTime;
@@ -118,12 +129,70 @@ function processSelection(select,callback){
             });
             break;
         case "4":
-            console.log('Create Indexs to db......');
-            repoMongoDB.createIndexs(function(){
-                logger.info("Index created:");
-                callback();
+            var isFullIndex=true;
+            var options=getOption();
+            var startDateDefault=config.alfresco.startDateDefault||"2012-01-01";
+
+            console.log('ReIndex Metadata from alf Host:'+config.alfresco.host);
+
+            var prompt_dropDB = {
+                name: 'IsDropDB',
+                message: 'Do you want to Drop DB?',
+                type: 'boolean',
+                required: true,
+                default: false
+
+            };
+            var prompt_startDate = {
+                name: 'startDate',
+                message: 'Transaction Start Date',
+                required: true,
+                default: startDateDefault
+            };
+            prompt.get([prompt_dropDB], function (err, result) {
+                var IsDropDB = result.IsDropDB;
+
+                if(IsDropDB){
+                    console.log('Drop db if exist......');
+                    prompt.get([prompt_startDate], function (err, result) {
+                        var startDate = result.startDate;
+                        fromCommitTime=moment(startDate);
+                        console.log('start date:'+moment(fromCommitTime).format());
+
+                        repoMongoDB.dropDB(function(){
+                            job.indexMetadataFromAlf(options,fromCommitTime,isFullIndex,function() {
+                                logger.info("creating index....");
+                                repoMongoDB.createIndexs(function(){
+                                    logger.info("index created:");
+                                    callback();
+                                });
+                            });
+                        });
+                    });
+                }
+                else{
+                    repoMongoDB.getMaxTxnTime(function(maxTxnTime){
+                        if(maxTxnTime){
+                            fromCommitTime=maxTxnTime;
+                        }
+                        else{
+                            prompt.get([prompt_startDate], function (err, result) {
+                                var startDate = result.startDate;
+                                fromCommitTime=moment(startDate);
+                            });
+                        }
+                        console.log('start date:'+moment(fromCommitTime).format());
+
+                        job.indexMetadataFromAlf(options,fromCommitTime,isFullIndex,function() {
+                            logger.info("creating index....");
+                            repoMongoDB.createIndexs(function(){
+                                logger.info("index created:");
+                                callback();
+                            });
+                        });
+                    });
+                }
             });
-            //job.indexMetadata(startId);
             break;
         case "5":
             var prompt_dumpPath = {

@@ -155,7 +155,9 @@ exports.bulkWrite = function bulkWrite(docs, collection,upsert, callback) {
             }
         }
         else{
-            col.insertMany(docs);
+            col.insertMany(docs,function(err, r) {
+                callback(err, r);
+            });
         }
 
 
@@ -178,7 +180,7 @@ exports.getMaxTxnTime = function getMaxTxnTime(callback) {
         var projection = {_id: 0};
         var sort = {commitTimeMs: -1};
         cmsnodes.find(query, projection).sort(sort).limit(1).toArray(function (err, docs) {
-            console.log(docs);
+            //console.log(docs);
             var maxTxnTime = docs[0].commitTimeMs;
             db.close();
             return callback(maxTxnTime);
@@ -265,9 +267,9 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
         async.whilst(
             function () { return !finished; },
             function (callback) {
-                var query = {PATH:{ '$regex': '^'+alfpath }, "id" : { "$gt" : maxId } };
-                //logger.info(query);
-                workspace.find(query, projection).sort(sort).limit(1000).toArray(function (err, docs) {
+                var query = { "id" : { "$gt" : maxId },PATH:{ '$regex': '^'+alfpath }};
+                logger.info(query);
+                workspace.find(query, projection).sort(sort).limit(100).toArray(function (err, docs) {
                     if(docs!== null&& docs.length>0){
                         maxId=_.max(docs, function(d){ return d.id; }).id;
                         logger.info('maxId:'+maxId+ ' counter:'+counter);
@@ -280,15 +282,33 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
                                 var fullpath=path.join(dumpPath,xmlFile);
                                 var dir = path.dirname(fullpath);
                                 var xml=xmlhelper.getMetadataXML(doc);
-                                logger.debug(xml);
-                                if (fs.existsSync(dir)===false) {
-                                    mkdirp.sync(dir);
-                                }
-                                fs.writeFile(fullpath, xml,'utf8', function(err) {
-                                    if(err) {
-                                        return logger.error("writeFileError:"+ err);
-                                    }
-                                });
+                                //logger.debug(xml);
+
+                                //fs.stat('foo.txt', function(err, stat) {
+                                //    if(err != null) {
+                                //        mkdirp(dir, function (err) {
+                                //            if (err){
+                                //                console.error(err);
+                                //            }
+                                //            else{
+                                //                fs.writeFile(fullpath, xml,'utf8', function(err) {
+                                //                    if(err) {
+                                //                        return logger.error("writeFileError:"+ err);
+                                //                    }
+                                //                });
+                                //            }
+                                //        });
+                                //    }
+                                //});
+
+                                //if (fs.existsSync(dir)===false) {
+                                //    mkdirp.sync(dir);
+                                //}
+                                //fs.writeFile(fullpath, xml,'utf8', function(err) {
+                                //    if(err) {
+                                //        return logger.error("writeFileError:"+ err);
+                                //    }
+                                //});
                             });
                         }
                         else{
@@ -310,5 +330,15 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
                 callback();
             }
         );
+    });
+};
+
+exports.dropDB = function (callback) {
+    MongoClient.connect(url, function (err, db) {
+        db.dropDatabase(function(err, result) {
+            db.close();
+            callback();
+        });
+
     });
 };
