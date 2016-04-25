@@ -1,7 +1,7 @@
 
 function decode(toDecode)
 {
-    if ((toDecode == null) || (toDecode.length < 7) || (toDecode.indexOf("_x") < 0))
+    if ((toDecode === null) || (toDecode.length < 7) || (toDecode.indexOf("_x") < 0))
     {
         return toDecode;
     }
@@ -26,10 +26,10 @@ function decode(toDecode)
 function matchesEncodedPattern(string, position)
 {
     return (string.length > position + 6) &&
-         (string.charAt(position) == '_') && (string.charAt(position + 1) == 'x')&&
+         (string.charAt(position) === '_') && (string.charAt(position + 1) === 'x')&&
          isHexChar(string.charAt(position + 2)) && isHexChar(string.charAt(position + 3))&&
          isHexChar(string.charAt(position + 4)) && isHexChar(string.charAt(position + 5))&&
-         (string.charAt(position + 6) == '_');
+         (string.charAt(position + 6) === '_');
 }
 function isHexChar(c)
 {

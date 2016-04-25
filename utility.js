@@ -1,4 +1,5 @@
 var escapeStringRegexp = require('escape-string-regexp');
+var ISO9075 = require('./ISO9075');
 
 function formatAlfPath(alfPath){
     var regCm = new RegExp(escapeStringRegexp('{http://www.alfresco.org/model/content/1.0}'),'g');
@@ -8,15 +9,17 @@ function formatAlfPath(alfPath){
         .replace(regApp,'app:');
 }
 
-function convertAlfPath2Path(alfPath){
+exports.convertAlfPath2Path=function (alfPath){
     var regCm = new RegExp(escapeStringRegexp('cm:'),'g');
     var regApp = new RegExp(escapeStringRegexp('app:'),'g');
-
-    return alfPath.replace(regCm,'').replace(regApp,'');
+    var path=alfPath.replace(regCm,'').replace(regApp,'');
+    return ISO9075.decode(path);
 }
 
 function formatBytes(bytes,decimals) {
-    if(bytes == 0) return '0 Byte';
+    if(bytes == 0){
+        return '0 Byte';
+    } 
     var k = 1000;
     var dm = decimals + 1 || 3;
     var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
@@ -34,10 +37,10 @@ exports.chunk=function chunk (arr, len) {
     }
 
     return chunks;
-}
+};
 exports.getMetadataFileName=function (filename) {
     return filename+".metadata.properties.xml";
-}
-exports.convertAlfPath2Path=convertAlfPath2Path;
+};
+
 exports.formatAlfPath=formatAlfPath;
 exports.formatBytes=formatBytes;

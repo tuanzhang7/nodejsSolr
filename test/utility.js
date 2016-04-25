@@ -20,7 +20,7 @@ describe('repoAlfresco', function() {
 
         it('convertAlfPath2Path', function () {
             assert.equal(result,
-                '/company_home/NLB_Project/BookSG/eBooks/type1/_x0032_0140120_x0020_DU_R657/B26074919E.pdf');
+                '/company_home/NLB_Project/BookSG/eBooks/type1/20140120 DU_R657/B26074919E.pdf');
         });
 
     });
@@ -37,15 +37,15 @@ describe('repoAlfresco', function() {
     describe('#formatBytes()', function () {
 
         it('bytes', function () {
-            var result=utility.formatBytes("100");
+            var result=utility.formatBytes(100);
             assert.equal('100 Bytes',result);
         });
         it('MB', function () {
-            var result=utility.formatBytes("1000000");
+            var result=utility.formatBytes(1000000);
             assert.equal('1.00 MB',result);
         });
         it('0 Byte', function () {
-            var result=utility.formatBytes("0");
+            var result=utility.formatBytes(0);
             assert.equal('0 Byte',result);
         });
 

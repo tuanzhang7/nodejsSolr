@@ -1,11 +1,8 @@
 {
   "id": 13963492,
-  "tenantDomain": "",
   "nodeRef": "workspace://SpacesStore/8516fc55-3639-4490-8c84-f3aaa55ab540",
   "type": "cm:content",
-  "aclId": 11,
   "txnId": 1589118,
-  "properties": {
     "cm:modified": "2015-01-22T11:37:51.932+08:00",
     "sys:node-uuid": "8516fc55-3639-4490-8c84-f3aaa55ab540",
     "sys:node-dbid": "13963492",
@@ -34,30 +31,14 @@
     "sys:locale": "en_US_",
     "sys:store-protocol": "workspace",
     "cm:created": "1901-01-01T12:34:56.789+10:00",
-    "cm:modifier": "admin"
-  },
+    "cm:modifier": "admin",
+
   "aspects": [
     "cm:auditable",
     "sys:referenceable",
     "cm:titled",
     "sys:localized"
   ],
-  "paths": [
-    {
-      "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}site1/{http://www.alfresco.org/model/content/1.0}flower.jpg"
-    }
-  ],
-  "ancestors": [
-    "workspace://SpacesStore/fab9a923-8a7e-419b-a826-9d67beacaf2d",
-    "workspace://SpacesStore/d934dac5-25fd-49ba-95aa-5fbf4d50f944",
-    "workspace://SpacesStore/f4218395-85a8-405a-be63-090ef975c7b1",
-    "workspace://SpacesStore/ee6b7f37-963c-4e75-a1dd-53e32b5cb72a",
-    "workspace://SpacesStore/77caba36-4b0f-46bc-8af3-1cc97583f7e9",
-    "workspace://SpacesStore/89f8a924-54b8-45a9-8329-bc11d9a20fa2"
-  ],
-  "parentAssocs": [
-    "workspace://SpacesStore/77caba36-4b0f-46bc-8af3-1cc97583f7e9|workspace://SpacesStore/8516fc55-3639-4490-8c84-f3aaa55ab540|{http://www.alfresco.org/model/content/1.0}contains|{http://www.alfresco.org/model/content/1.0}flower.jpg|true|-1"
-  ],
-  "parentAssocsCrc": 1001565582,
-  "owner": "admin"
+  "PATH": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}site1/{http://www.alfresco.org/model/content/1.0}flower.jpg"
+
 }
