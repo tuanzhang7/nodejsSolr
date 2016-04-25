@@ -74,6 +74,7 @@ function getOption(){
     return options;
 }
 function processSelection(select,callback){
+    var options=getOption();
     switch(select)
     {
         //case "1":
@@ -103,7 +104,7 @@ function processSelection(select,callback){
             });
             break;
         case "3":
-            var options=getOption();
+
             console.log('Index Metadata from alf Host:'+config.alfresco.host);
 
             var fromCommitTime;
@@ -130,7 +131,6 @@ function processSelection(select,callback){
             break;
         case "4":
             var isFullIndex=true;
-            var options=getOption();
             var startDateDefault=config.alfresco.startDateDefault||"2012-01-01";
 
             console.log('ReIndex Metadata from alf Host:'+config.alfresco.host);
@@ -195,15 +195,18 @@ function processSelection(select,callback){
             });
             break;
         case "5":
+            var defaultDumppath=config.xml.dumppath;
             var prompt_dumpPath = {
                 name: 'dumpPath',
                 message: 'dump xml to path',
-                required: true
+                required: true,
+                default:defaultDumppath
             };
             var prompt_alfpath = {
                 name: 'alfpath',
                 message: 'Dump metadata by path .e.g /app:company_home/cm:site1/cm:folder1',
-                required: true
+                required: true,
+                default:'/app:company_home'
             };
             prompt.get([prompt_alfpath,prompt_dumpPath], function (err, result) {
                 var alfpath = result.alfpath;

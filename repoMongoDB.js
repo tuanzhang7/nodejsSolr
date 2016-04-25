@@ -253,7 +253,8 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
         callback();
     }
     //logger.info('dumpByPath:'+alfpath);
-    console.time("dumpByPath");
+
+    var begin=Date.now();
     MongoClient.connect(url, function (err, db) {
         var workspace = db.collection('workspace');
         
@@ -268,39 +269,54 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
             function () { return !finished; },
             function (callback) {
                 var query = { "id" : { "$gt" : maxId },PATH:{ '$regex': '^'+alfpath }};
-                logger.info(query);
+                //logger.info(query);
+                if(counter%1000===0){
+                    var timeSpent=parseInt(counter/((Date.now()-begin)/1000));
+                    logger.info('speed:'+timeSpent+ '/sec,  counter:'+counter);
+                    // if(counter>10000) {
+                    //     finished=true;
+                    //     callback();
+                    // }
+                }
                 workspace.find(query, projection).sort(sort).limit(100).toArray(function (err, docs) {
-                    if(docs!== null&& docs.length>0){
+                    if(docs!== undefined && docs!== null && docs.length>0){
                         maxId=_.max(docs, function(d){ return d.id; }).id;
-                        logger.info('maxId:'+maxId+ ' counter:'+counter);
-                        
+
                         counter+=docs.length;
+                        //logger.info('maxId:'+maxId+ ' counter:'+counter);
                         if(maxId!== undefined){
-                            docs.forEach(function (doc) {
+                            async.each(docs, function(doc, callback) {
+
                                 var relpath=utility.convertAlfPath2Path(doc.PATH);
                                 var xmlFile=utility.getMetadataFileName(relpath);
                                 var fullpath=path.join(dumpPath,xmlFile);
                                 var dir = path.dirname(fullpath);
                                 var xml=xmlhelper.getMetadataXML(doc);
+                                //logger.info('each:'+dir);
                                 //logger.debug(xml);
 
-                                //fs.stat('foo.txt', function(err, stat) {
-                                //    if(err != null) {
-                                //        mkdirp(dir, function (err) {
-                                //            if (err){
-                                //                console.error(err);
-                                //            }
-                                //            else{
-                                //                fs.writeFile(fullpath, xml,'utf8', function(err) {
-                                //                    if(err) {
-                                //                        return logger.error("writeFileError:"+ err);
-                                //                    }
-                                //                });
-                                //            }
-                                //        });
-                                //    }
-                                //});
-
+                                fs.stat(dir, function(err, stat) {
+                                    if(err !== null) {
+                                        mkdirp(dir, function (err) {
+                                            if (err){
+                                                console.error(err);
+                                                callback("mkdirp error:"+ err);
+                                            }
+                                            else{
+                                                fs.writeFile(fullpath, xml,'utf8', function(err) {
+                                                    if(err) {
+                                                        logger.error("writeFileError:"+ err);
+                                                        callback("writeFileError:"+ err);
+                                                    }
+                                                    callback();
+                                                });
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        callback();
+                                    }
+                                });
                                 //if (fs.existsSync(dir)===false) {
                                 //    mkdirp.sync(dir);
                                 //}
@@ -309,13 +325,24 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
                                 //        return logger.error("writeFileError:"+ err);
                                 //    }
                                 //});
+                            }, function(err){
+                                // if any of the file processing produced an error, err would equal that error
+                                if( err ) {
+                                    // One of the iterations produced an error.
+                                    // All processing will now stop.
+                                    console.log('A file failed to process:'+err);
+                                } else {
+                                    //console.log('All files have been processed successfully');
+                                    callback();
+                                }
                             });
                         }
                         else{
                             logger.info('could not get maxid');
                             finished=true;
+                            callback();
                         }
-                        callback();
+
                     }
                     else{
                         logger.info('total counter:'+counter);
@@ -326,7 +353,8 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
             },
             function (err, n) {
                 db.close();
-                console.timeEnd("dumpByPath");
+                var timeSpent=parseInt(counter/((Date.now()-begin)/1000));
+                logger.info('Speed:'+timeSpent+ '/sec,  Total:'+counter);
                 callback();
             }
         );

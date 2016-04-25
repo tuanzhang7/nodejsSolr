@@ -13,8 +13,8 @@
     "SkipNodeId":["11"]
   },
   "mongodb": {
-    "host": "172.30.11.195",
-    "port":"3306",
+    "host": "localhost",
+    "port":"27017",
     "db":"ncms"
   },
   "xml":{
@@ -32,6 +32,7 @@
       "aspects"
 
     ],
-    "delimiter":","
+    "delimiter":",",
+    "dumppath":"E:/export"
   }
 }

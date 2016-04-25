@@ -4,7 +4,7 @@ var delimiter = config.xml.delimiter;
 var excludeFields = config.xml.excludeFields;
 
 exports.getMetadataXML=function (doc) {
-    var xml = builder.create('properties')
+    var xml = builder.create('properties',{allowSurrogateChars: true})
         .dec({ version: '1.0', encoding: 'UTF-8' });
     //;
     //var type=doc.type;
