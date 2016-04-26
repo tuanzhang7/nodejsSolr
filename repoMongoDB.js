@@ -176,15 +176,22 @@ exports.bulkWrite = function bulkWrite(docs, collection,upsert, callback) {
 
 exports.getMaxTxnTime = function getMaxTxnTime(callback) {
     MongoClient.connect(url, function (err, db) {
-        var cmsnodes = db.collection('transactions');
+        var txns = db.collection('transactions');
         var query = {};
         var projection = {_id: 0};
         var sort = {commitTimeMs: -1};
-        cmsnodes.find(query, projection).sort(sort).limit(1).toArray(function (err, docs) {
-            //console.log(docs);
-            var maxTxnTime = docs[0].commitTimeMs;
+        var maxTxnTime;
+        txns.find(query, projection).sort(sort).limit(1).toArray(function (err, docs) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                if(docs.length>0){
+                    maxTxnTime = docs[0].commitTimeMs;
+                }
+            }
             db.close();
-            return callback(maxTxnTime);
+            callback(maxTxnTime);
         });
     });
 };
@@ -369,5 +376,22 @@ exports.dropDB = function (callback) {
             callback();
         });
 
+    });
+};
+
+exports.getNodeByKey = function (key,value,collection,callback) {
+    MongoClient.connect(url, function (err, db) {
+        var collection = db.collection(collection);
+        var query = {key: value};
+        var projection = {_id: -1};
+        collection.find(query, projection).limit(1).toArray(function (err, docs) {
+            var nodeIdArray = [];
+            for (var i = 0; i < docs.length; i++) {
+                var sys_nodeId = docs[i].sys_nodeId;
+                nodeIdArray.push(sys_nodeId);
+            }
+            db.close();
+            return callback(nodeIdArray);
+        });
     });
 };

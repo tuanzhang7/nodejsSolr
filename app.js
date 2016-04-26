@@ -99,10 +99,32 @@ function processSelection(select,callback){
 
         case "1":
             console.log('Show Status......');
-            solrClient.getMaxTransactionId(function(maxId){
-                console.log('Solr Max TransactionId:'+maxId);
-                callback();
-            });
+            console.log('Alfresco Host:'+config.alfresco.host);
+
+            async.series([
+                    function(callback){
+                        repoMongoDB.getMaxTxnTime(function(maxTxnTime) {
+                            if (maxTxnTime) {
+                                console.log('Last DB Txn Time:'+maxTxnTime);
+                            }
+                            else{
+                                console.log('Blank database');
+                            }
+                            callback();
+                        });
+                    },
+                    function(callback){
+                        console.log("Second");
+                        callback();
+                    }
+                ],
+                function(err, results){
+
+                    console.log("results");
+                    callback();
+                }
+            );
+            console.log("outside");
             break;
         case "3":
 
@@ -238,7 +260,7 @@ function processSelection(select,callback){
             prompt.get([prompt_textpath,prompt_dumpPath], function (err, result) {
                 var textpath = result.textpath;
                 var dumpPath = result.dumpPath;
-
+                
             });
             break;
         case "q":
