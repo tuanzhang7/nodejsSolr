@@ -179,7 +179,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
 
                     var txnsSize=txns.transactions.length;
                     if(txnsSize>0){
-                        txnsCounter=txnsCounter+txnsSize
+                        txnsCounter=txnsCounter+txnsSize;
                         logger.info(' Total txns:'+txnsCounter);
                         logger.info('time:'+_fromCommitTime+"-"+_toCommitTime+"  "+moment(_fromCommitTime).format()+" txnsSize:"+txnsSize);
                     }
@@ -221,6 +221,11 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                                             var nodesArray=JSON.parse(nodesResult).nodes;
                                             size+=nodesArray.length;
                                             var nodeIdList=_.pluck(nodesArray, 'id');
+                                            var skipNodeIds=configs.alfresco.skipNodeId;
+                                            if(skipNodeIds){
+                                                nodeIdList=_.difference(nodeIdList, skipNodeIds);
+                                            }
+
                                             //logger.info("txns from-to:"+firstTxnId+"-"+lastTxnId);
                                             //callback();
                                             //_.sortBy(nodesArray.nodes, 'txnId').forEach(function(node) {
@@ -268,40 +273,52 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                                                     }
                                                     //callback();
                                                 });
-                                            }, function(done) {
+                                            }, function(error) {
                                                 //save to db
-                                                var upsert=!isFullIndex;
-                                                async.series([
-                                                    function(callback){
-                                                        if(workspaceArray&&workspaceArray.length>0){
-                                                            repo.bulkWrite(workspaceArray,"workspace",upsert,function(err,result){
-                                                                if(err){
-                                                                    logger.error('error bulk insert to workspace DB:'+err);
-                                                                }
-                                                            });
-                                                        }
-                                                    },
-                                                    function(callback){
-                                                        if(archiveArray&&archiveArray.length>0){
-                                                            repo.bulkWrite(archiveArray,"archive",upsert,function(err,result){
-                                                                if(err){
-                                                                    logger.error('error bulk insert to archive DB:'+err);
-                                                                }
-                                                            });
-                                                        }
-                                                    }
-                                                    ,
-                                                    function(callback){
-                                                        repo.bulkWrite(txns.transactions,"transactions",false,function(err,result){
-                                                            if(err){
-                                                                logger.error('error bulk insert to transactions DB:'+err);
+                                                if(err){
+                                                    console.log(err);
+                                                } else {
+                                                    var upsert=!isFullIndex;
+                                                    async.series([
+                                                        function(callback){
+                                                            if(workspaceArray&&workspaceArray.length>0){
+                                                                repo.bulkWrite(workspaceArray,"workspace",upsert,function(err,result){
+                                                                    if(err){
+                                                                        logger.error('error bulk insert to workspace DB:'+err);
+                                                                    }
+                                                                    callback(null, 'one');
+                                                                });
+                                                            }else{
+                                                                callback(null, 'two');
                                                             }
-                                                        });
-                                                    }
-                                                ],
-                                                function(err, results){
+                                                        },
+                                                        function(callback){
+                                                            if(archiveArray&&archiveArray.length>0){
+                                                                repo.bulkWrite(archiveArray,"archive",upsert,function(err,result){
+                                                                    if(err){
+                                                                        logger.error('error bulk insert to archive DB:'+err);
+                                                                    }
+                                                                    callback(null, 'two');
+                                                                });
+                                                            }else{
+                                                                callback(null, 'two');
+                                                            }
+                                                        }
+                                                        ,
+                                                        function(callback){
+                                                            repo.bulkWrite(txns.transactions,"transactions",false,function(err,result){
+                                                                if(err){
+                                                                    logger.error('error bulk insert to transactions DB:'+err);
+                                                                }
+                                                                callback(null, 'three');
+                                                            });
+                                                        }
+                                                    ],
+                                                    function(err, results){
+                                                        //callback();
+                                                    });
                                                     callback();
-                                                });
+                                                }
                                             });
                                         }
                                         else{

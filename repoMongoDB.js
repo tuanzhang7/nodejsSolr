@@ -156,6 +156,7 @@ exports.bulkWrite = function bulkWrite(docs, collection,upsert, callback) {
         }
         else{
             col.insertMany(docs,function(err, r) {
+                db.close();
                 callback(err, r);
             });
         }

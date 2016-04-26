@@ -10,12 +10,12 @@
     "maxTxnsResults":1000,
     "TYPE":"NCMS:NCMSFields",
     "BulkImportDelimiter":",",
-    "SkipNodeId":["11"]
+    "skipNodeId":[11]
   },
   "mongodb": {
-    "host": "localhost",
-    "port":"27017",
-    "db":"ncms"
+    "host": "172.30.11.195",
+    "port":"3306",
+    "db":"cms"
   },
   "xml":{
     "excludeFields":[
@@ -33,6 +33,6 @@
 
     ],
     "delimiter":",",
-    "dumppath":"E:/export"
+    "dumppath":"D:/export"
   }
 }
