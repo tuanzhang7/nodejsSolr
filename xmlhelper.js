@@ -1,5 +1,5 @@
 var builder = require('xmlbuilder');
-var config = require('./config.json');
+var config = require('./config.js');
 var delimiter = config.xml.delimiter;
 var excludeFields = config.xml.excludeFields;
 

@@ -1,7 +1,7 @@
 
 var http = require('http');
 var logger=require('./log.js').logger;
-var config = require('./config.json');
+var config = require('./config.js');
 var utlity=require('./utility.js');
 
 var alfHostName=config.alfresco.host;//"localhost";//"ncmsr.nlb.gov.sg";//"10.14.244.84";

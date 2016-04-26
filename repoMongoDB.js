@@ -3,7 +3,7 @@ var logger = require('./log.js').logger;
 var utility=require('./utility.js');
 var xmlhelper =require('./xmlhelper.js');
 var MongoClient = require('mongodb').MongoClient;
-var config = require('./config.json');
+var config = require('./config.js');
 var host = config.mongodb.host;
 var port = config.mongodb.port;
 var db = config.mongodb.db;
@@ -382,16 +382,15 @@ exports.dropDB = function (callback) {
 exports.getNodeByKey = function (key,value,collection,callback) {
     MongoClient.connect(url, function (err, db) {
         var collection = db.collection(collection);
-        var query = {key: value};
+        var query = {};
+        query[key]=value;
         var projection = {_id: -1};
-        collection.find(query, projection).limit(1).toArray(function (err, docs) {
-            var nodeIdArray = [];
-            for (var i = 0; i < docs.length; i++) {
-                var sys_nodeId = docs[i].sys_nodeId;
-                nodeIdArray.push(sys_nodeId);
+        collection.find(query, projection).limit(1).next(function (err, doc) {
+            if(err){
+                callback();
             }
             db.close();
-            return callback(nodeIdArray);
+            callback(doc);
         });
     });
 };

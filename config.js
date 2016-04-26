@@ -1,4 +1,4 @@
-{
+module.exports = {
   "alfresco": {
     "host": "10.14.244.184",
     "contentCachePath":"Z:/projects/CMSTools/content/",
@@ -35,4 +35,4 @@
     "delimiter":",",
     "dumppath":"D:/export"
   }
-}
+};

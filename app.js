@@ -9,7 +9,7 @@ console.time("loading-requireds-local");
 var logger=require('./log.js').logger;
 var job=require('./job.js');
 var repoMongoDB = require('./repoMongoDB');
-var config = require('./config.json');
+var config = require('./config.js');
 console.timeEnd("loading-requireds-local");
 
 console.timeEnd("loading-requireds");
