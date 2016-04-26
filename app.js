@@ -75,6 +75,7 @@ function getOption(){
 }
 function processSelection(select,callback){
     var options=getOption();
+    var defaultDumppath=config.xml.dumppath;
     switch(select)
     {
         //case "1":
@@ -195,7 +196,6 @@ function processSelection(select,callback){
             });
             break;
         case "5":
-            var defaultDumppath=config.xml.dumppath;
             var prompt_dumpPath = {
                 name: 'dumpPath',
                 message: 'dump xml to path',
@@ -220,6 +220,25 @@ function processSelection(select,callback){
                         callback();
                     });
                 }
+            });
+            break;
+        case "6":
+
+            var prompt_dumpPath = {
+                name: 'dumpPath',
+                message: 'dump xml to path',
+                required: true,
+                default:defaultDumppath
+            };
+            var prompt_textpath = {
+                name: 'textpath',
+                message: 'Id list text file path',
+                required: true
+            };
+            prompt.get([prompt_textpath,prompt_dumpPath], function (err, result) {
+                var textpath = result.textpath;
+                var dumpPath = result.dumpPath;
+
             });
             break;
         case "q":
