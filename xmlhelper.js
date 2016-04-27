@@ -1,9 +1,11 @@
 var builder = require('xmlbuilder');
-var config = require('./config.js');
-var delimiter = config.xml.delimiter;
-var excludeFields = config.xml.excludeFields;
+var fs=require('fs');
+var path=require('path');
+var utility=require('./utility.js');
+var mkdirp = require('mkdirp');
 
-exports.getMetadataXML=function (doc) {
+exports.getMetadataXML=function (doc,excludeFields,delimiter) {
+    delimiter = delimiter || ",";
     var xml = builder.create('properties',{allowSurrogateChars: true})
         .dec({ version: '1.0', encoding: 'UTF-8' });
     //;
@@ -19,15 +21,17 @@ exports.getMetadataXML=function (doc) {
     for (var k in doc){
         if (doc.hasOwnProperty(k)) {
 
-            if(excludeFields.indexOf(k)===-1 && k.indexOf("sys:")===-1){
+            if(excludeFields){
+                if(excludeFields.indexOf(k)===-1 && k.indexOf("sys:")===-1){
 
-                var value=this.getPropertyValue(doc[k],delimiter);
-                
-                //console.log("Key is:" + k + ", " + JSON.stringify(value));
+                    var value=this.getPropertyValue(doc[k],delimiter);
 
-                var strValue=JSON.stringify(value);
-                var strKey=JSON.stringify(k);
-                xml.ele('entry',{'key': k},value);
+                    //console.log("Key is:" + k + ", " + JSON.stringify(value));
+
+                    var strValue=JSON.stringify(value);
+                    var strKey=JSON.stringify(k);
+                    xml.ele('entry',{'key': k},value);
+                }
             }
         }
     }
@@ -70,4 +74,49 @@ exports.getAspects=function (aspects) {
     }
     return null;
 
+};
+
+exports.saveMetadataFile=function (doc,path2save,excludeFields,delimiter,callback) {
+    delimiter = delimiter || ",";
+    var relpath=utility.convertAlfPath2Path(doc.PATH);
+    var xmlFile=utility.getMetadataFileName(relpath);
+    var fullpath=path.join(path2save,xmlFile);
+    var dir = path.dirname(fullpath);
+    var xml=this.getMetadataXML(doc,excludeFields,delimiter);
+    //console.log('dir:'+dir);
+    //logger.debug(xml);
+
+    fs.stat(dir, function(err, stat) {
+        if(err !== null) {
+            mkdirp(dir, function (err) {
+                if (err){
+                    console.error(err);
+                    callback("mkdirp error:"+ err);
+                }
+                else{
+                    fs.writeFile(fullpath, xml,'utf8', function(err) {
+                        if(err) {
+                            logger.error("writeFileError:"+ err);
+                            callback("writeFileError:"+ err);
+                        }
+                        else{
+                            callback();
+                        }
+                    });
+                }
+            });
+        }
+        else{
+            console.log('dir exist:'+dir);
+            fs.writeFile(fullpath, xml,'utf8', function(err) {
+                if(err) {
+                    logger.error("writeFileError:"+ err);
+                    callback("writeFileError:"+ err);
+                }
+                else{
+                    callback();
+                }
+            });
+        }
+    });
 };

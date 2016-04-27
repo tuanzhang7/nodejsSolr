@@ -9,6 +9,8 @@ console.time("loading-requireds-local");
 var logger=require('./log.js').logger;
 var job=require('./job.js');
 var repoMongoDB = require('./repoMongoDB');
+var textFileHelper = require('./textFileHelper');
+var xmlhelper =require('./xmlhelper.js');
 var config = require('./config.js');
 console.timeEnd("loading-requireds-local");
 
@@ -254,12 +256,45 @@ function processSelection(select,callback){
             };
             var prompt_textpath = {
                 name: 'textpath',
-                message: 'Id list text file path',
+                message: 'Id list csv file path',
                 required: true
             };
             prompt.get([prompt_textpath,prompt_dumpPath], function (err, result) {
                 var textpath = result.textpath;
                 var dumpPath = result.dumpPath;
+                var excludeFields = config.xml.excludeFields;
+                var delimiter = config.xml.delimiter;
+
+                textFileHelper.readCSV(textpath,',',function (result) {
+                    async.each(result, function(row, callback) {
+                        //console.log(row);
+                        var keys=Object.keys(row);
+
+                        var key_name=keys[0];
+                        var key_value=row[key_name];
+                        //console.log(key_name+ "--"+key_value);
+                        repoMongoDB.getNodeByKey(key_name,key_value,'workspace',function (doc) {
+                            // console.log(doc);
+                            if(doc){
+                                xmlhelper.saveMetadataFile(doc,dumpPath,excludeFields,delimiter,function (err) {
+                                    callback();
+                                });
+                            }
+                            else{
+                                callback();
+                            }
+
+                        });
+                    }, function(err){
+                        // if any of the file processing produced an error, err would equal that error
+                        if( err ) {
+                            console.log('A file failed to process:'+err);
+                        } else {
+                            //console.log('All files have been processed successfully');
+                            callback();
+                        }
+                    });
+                });
                 
             });
             break;

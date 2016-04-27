@@ -12,7 +12,7 @@ var async = require('async');
 var fs = require('fs');
 var _ = require('underscore');
 var path=require('path');
-var mkdirp = require('mkdirp');
+
 var url = 'mongodb://' + host + ':' + port + '/' + db;
 
 
@@ -147,7 +147,7 @@ exports.bulkWrite = function bulkWrite(docs, collection,upsert, callback) {
                 var nodeId = obj['sys:node-dbid'];
                 bulk.find({"sys:node-dbid":nodeId}).upsert().updateOne(obj);
                 bulk.execute(function (err, r) {
-                    console.log(err)
+                    console.log(err);
                     // Finish up test
                     db.close();
                     callback(err, r);
@@ -261,6 +261,8 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
         callback();
     }
     //logger.info('dumpByPath:'+alfpath);
+    var delimiter = config.xml.delimiter;
+    var excludeFields = config.xml.excludeFields;
 
     var begin=Date.now();
     MongoClient.connect(url, function (err, db) {
@@ -294,50 +296,12 @@ exports.dumpByPath = function(alfpath,dumpPath,callback) {
                         //logger.info('maxId:'+maxId+ ' counter:'+counter);
                         if(maxId!== undefined){
                             async.each(docs, function(doc, callback) {
-
-                                var relpath=utility.convertAlfPath2Path(doc.PATH);
-                                var xmlFile=utility.getMetadataFileName(relpath);
-                                var fullpath=path.join(dumpPath,xmlFile);
-                                var dir = path.dirname(fullpath);
-                                var xml=xmlhelper.getMetadataXML(doc);
-                                //logger.info('each:'+dir);
-                                //logger.debug(xml);
-
-                                fs.stat(dir, function(err, stat) {
-                                    if(err !== null) {
-                                        mkdirp(dir, function (err) {
-                                            if (err){
-                                                console.error(err);
-                                                callback("mkdirp error:"+ err);
-                                            }
-                                            else{
-                                                fs.writeFile(fullpath, xml,'utf8', function(err) {
-                                                    if(err) {
-                                                        logger.error("writeFileError:"+ err);
-                                                        callback("writeFileError:"+ err);
-                                                    }
-                                                    callback();
-                                                });
-                                            }
-                                        });
-                                    }
-                                    else{
-                                        callback();
-                                    }
+                                xmlhelper.saveMetadataFile(doc,dumpPath,excludeFields,function () {
+                                    callback();
                                 });
-                                //if (fs.existsSync(dir)===false) {
-                                //    mkdirp.sync(dir);
-                                //}
-                                //fs.writeFile(fullpath, xml,'utf8', function(err) {
-                                //    if(err) {
-                                //        return logger.error("writeFileError:"+ err);
-                                //    }
-                                //});
                             }, function(err){
                                 // if any of the file processing produced an error, err would equal that error
                                 if( err ) {
-                                    // One of the iterations produced an error.
-                                    // All processing will now stop.
                                     console.log('A file failed to process:'+err);
                                 } else {
                                     //console.log('All files have been processed successfully');
@@ -378,14 +342,16 @@ exports.dropDB = function (callback) {
 
     });
 };
-
+//key:"sys:node-dbid","101475"
 exports.getNodeByKey = function (key,value,collection,callback) {
+    //console.log('key:'+key+' value:'+value+" collection:"+collection);
+    collection=collection||'workspace';
     MongoClient.connect(url, function (err, db) {
-        var collection = db.collection(collection);
+        var col = db.collection(collection);
         var query = {};
         query[key]=value;
-        var projection = {_id: -1};
-        collection.find(query, projection).limit(1).next(function (err, doc) {
+        var projection = {};
+        col.find(query, projection).limit(1).next(function (err, doc) {
             if(err){
                 callback();
             }
