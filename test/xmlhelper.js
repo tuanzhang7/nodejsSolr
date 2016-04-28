@@ -2,15 +2,17 @@
 var assert = require('assert');
 var xmlhelper = require('../xmlhelper');
 var fs = require('fs');
+var config = require('../config.js');
 
 describe('xmlhelper', function() {
     
+    var excludeFields = config.xml.excludeFields;
     describe('#getMetadataXML()', function () {
         it('simple doc', function () {
             var jsondoc=fs.readFileSync('./test/doc.json', 'utf8');
             var doc = JSON.parse(jsondoc);
             var metadata=fs.readFileSync('./test/doc.xml', 'utf8');
-            var result=xmlhelper.getMetadataXML(doc);
+            var result=xmlhelper.getMetadataXML(doc,excludeFields,",");
             var expect=metadata;
             assert.equal(result,expect);
         });
@@ -18,7 +20,7 @@ describe('xmlhelper', function() {
             var jsondoc=fs.readFileSync('./test/ncms.json', 'utf8');
             var doc = JSON.parse(jsondoc);
             var metadata=fs.readFileSync('./test/ncms.xml', 'utf8');
-            var result=xmlhelper.getMetadataXML(doc);
+            var result=xmlhelper.getMetadataXML(doc,excludeFields,",");
             var expect=metadata;
             assert.equal(result,expect);
         });

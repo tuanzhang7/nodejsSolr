@@ -1,7 +1,7 @@
 
 var http = require('http');
 var logger=require('./log.js').logger;
-var config = require('./config.json');
+var config = require('./config.js');
 var utlity=require('./utility.js');
 
 var alfHostName=config.alfresco.host;//"localhost";//"ncmsr.nlb.gov.sg";//"10.14.244.84";
@@ -246,6 +246,7 @@ exports.convertAlfNodeJson= function convertAlfNodeJson(node){
     obj.type=nodeJson.type;
     obj.nodeRef=nodeJson.nodeRef;
     obj.aspects=nodeJson.aspects;
+    //obj['cm:content'].size=
     //logger.info(JSON.stringify(obj));
     //delete obj["cm_title"];
     //delete obj["cm_modifier"];

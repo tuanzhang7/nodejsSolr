@@ -1,4 +1,4 @@
-{
+module.exports = {
   "alfresco": {
     "host": "10.14.244.184",
     "contentCachePath":"Z:/projects/CMSTools/content/",
@@ -9,13 +9,12 @@
     "getMetadataThreads":6,
     "maxTxnsResults":1000,
     "TYPE":"NCMS:NCMSFields",
-    "BulkImportDelimiter":",",
     "skipNodeId":[11]
   },
   "mongodb": {
-    "host": "localhost",
-    "port":"27017",
-    "db":"ncms"
+    "host": "172.30.11.195",//localhost
+    "port":"3306",//27017
+    "db":"cms"
   },
   "xml":{
     "excludeFields":[
@@ -35,4 +34,4 @@
     "delimiter":",",
     "dumppath":"D:/export"
   }
-}
+};

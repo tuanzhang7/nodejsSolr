@@ -7,7 +7,7 @@ var fs = require('fs');
 var repo = require('./repoMongoDB');
 var repoAlfresco = require('./repoAlfresco');
 var logger=require('./log.js').logger;
-var configs = require('./config.json');
+var configs = require('./config.js');
 var utility=require('./utility.js');
 
 var start;

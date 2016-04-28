@@ -16,6 +16,7 @@
   "dependencies": {
     "async": "1.5.0",
     "cron": "1.0.9",
+    "csv": "^0.4.6",
     "escape-string-regexp": "^1.0.3",
     "mkdirp": "^0.5.1",
     "moment": "2.10.6",
