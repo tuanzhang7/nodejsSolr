@@ -1,0 +1,6 @@
+uglifyjs repoAlfresco.js -o repoAlfresco.js -m
+uglifyjs repoMongoDB.js -o repoMongoDB.js -m
+uglifyjs utility.js -o utility.js -m
+uglifyjs job.js -o job.js -m
+uglifyjs ISO9075.js -o ISO9075.js -m
+uglifyjs xmlhelper.js -o xmlhelper.js -m
