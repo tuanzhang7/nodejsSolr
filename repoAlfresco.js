@@ -4,14 +4,15 @@ var logger=require('./log.js').logger;
 var config = require('./config.js');
 var utlity=require('./utility.js');
 
-var alfHostName=config.alfresco.host;//"localhost";//"ncmsr.nlb.gov.sg";//"10.14.244.84";
+var alfHostName=config.alfresco.host;
+var port=config.alfresco.port;
 var maxSockets=config.alfresco.maxSockets;
 exports.getContentByNodeId = function getContentByNodeId(nodeId,callback){
     var alfGetContentURL="/alfresco/service/api/solr/textContent?nodeId="+nodeId+"&propertyQName=%7Bhttp%3A%2F%2Fwww.alfresco.org%2Fmodel%2Fcontent%2F1.0%7Dcontent";
 
     var options = {
         hostname: alfHostName,
-        port: 80,
+        port: port,
         path: alfGetContentURL,
         method: 'GET'
         //agent:false
@@ -61,7 +62,7 @@ exports.getMetadataByNodeId= function getMetadataByNodeId(nodeId,callback){
     });
     var options = {
         hostname: alfHostName,
-        port: 80,
+        port: port,
         path: "/alfresco/service/api/solr/metadata",
         method: 'POST',
         headers: {
@@ -103,7 +104,7 @@ exports.getMetadataByNodeIds= function getMetadataByNodeIds(nodeIdList,callback)
     });
     var options = {
         hostname: alfHostName,
-        port: 80,
+        port: port,
         path: "/alfresco/service/api/solr/metadata",
         method: 'POST',
         headers: {
@@ -146,7 +147,7 @@ exports.getNodesByTxnId= function getNodesByTxnId(fromTxnId,toTxnId,callback){
     });
     var options = {
         hostname: alfHostName,
-        port: 80,
+        port: port,
         path: "/alfresco/service/api/solr/nodes",
         method: 'POST',
         headers: {
@@ -187,7 +188,7 @@ exports.getTxnsByTime= function getTxnsByTime(fromCommitTime,toCommitTime,maxRes
     var alfURL="/alfresco/service/api/solr/transactions?fromCommitTime="+fromCommitTime+"&toCommitTime="+toCommitTime+"&maxResults="+maxResults;
     var options = {
         hostname: alfHostName,
-        port: 80,
+        port: port,
         path: alfURL,
         method: 'GET'//,
         //agent: false
@@ -223,24 +224,26 @@ exports.getTxnsByTime= function getTxnsByTime(fromCommitTime,toCommitTime,maxRes
 };
 
 exports.convertAlfNodeJson= function convertAlfNodeJson(node){
+    node=utlity.toSimplePrefix(node);
     var nodeJson = JSON.parse(node, function(key, value) {
-        //if (value && typeof value === 'object')
-            //for (var k in value) {
-            //    if(k=='cm:title'||k=='cm:modifier'||k=='cm:creator'
-            //        ||k=='sys:locale'||k=='cm:content'||k=='sys:store-identifier'||k=='sys:store-protocol'){
-            //        delete value[k];
-            //    }
-            //    else if (k.indexOf(':')>0 && Object.hasOwnProperty.call(value, k)) {
-            //        value[k.replace(':','_')] = value[k];
-            //        delete value[k];
-            //    }
-            //}
+        //if (value && typeof value === 'object'){
+            // for (var k in value) {
+            //    // if(k=='cm:title'||k=='cm:modifier'||k=='cm:creator'
+            //    //     ||k=='sys:locale'||k=='cm:content'||k=='sys:store-identifier'||k=='sys:store-protocol'){
+            //    //     delete value[k];
+            //    // }
+            //    // else if (k.indexOf(':')>0 && Object.hasOwnProperty.call(value, k)) {
+            //    //     value[k.replace(':','_')] = value[k];
+            //    //     delete value[k];
+            //    // }
+            //     value[k] =utlity.toSimplePrefix( value[k]);
+            // }
+        //}
         return value;
     });
-
     //var nodeJson=JSON.parse(node)
     var obj=nodeJson.properties;
-    obj.PATH=utlity.formatAlfPath(nodeJson.paths[0].path);
+    obj.PATH=nodeJson.paths[0].path;//utlity.formatAlfPath(nodeJson.paths[0].path);
     obj.id=nodeJson.id;
     obj.txnId=nodeJson.txnId;
     obj.type=nodeJson.type;

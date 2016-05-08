@@ -1,0 +1,73 @@
+
+    {
+      "id": 2400,
+      "tenantDomain": "",
+      "nodeRef": "workspace://SpacesStore/9fe41330-53c4-4618-a306-1e139a39f0d4",
+      "type": "cm:content",
+      "aclId": 11,
+      "txnId": 53,
+      "properties": {
+        "{http://www.alfresco.org/model/system/1.0}store-protocol": "workspace",
+        "{http://www.alfresco.org/model/system/1.0}node-dbid": "2400",
+        "{http://www.alfresco.org/model/content/1.0}content": {
+          "contentId": "1770",
+          "encoding": "UTF-8",
+          "locale": "en_SG_",
+          "mimetype": "image/jpeg",
+          "size": "0"
+        },
+        "{http://www.alfresco.org/model/content/1.0}name": "IMG_870.jpg",
+        "{http://www.alfresco.org/model/content/1.0}modified": "2016-05-06T13:07:05.296Z",
+        "{http://www.alfresco.org/model/content/1.0}creator": "admin",
+        "{http://www.alfresco.org/model/content/1.0}description": [
+          {
+            "locale": "en_",
+            "value": "A photo I took of a flower while walking around Bantry Bay."
+          }
+        ],
+        "{http://www.alfresco.org/model/content/1.0}created": "1901-01-01T02:34:56.789Z",
+        "{http://www.alfresco.org/model/content/1.0}publisher": "Peter Monks",
+        "{http://www.alfresco.org/model/content/1.0}author": "Peter Monks",
+        "{http://www.alfresco.org/model/system/1.0}store-identifier": "SpacesStore",
+        "{http://www.alfresco.org/model/content/1.0}title": [
+          {
+            "locale": "en_",
+            "value": "A photo of a flower."
+          }
+        ],
+        "{http://www.alfresco.org/model/system/1.0}locale": "en_SG_",
+        "{http://www.alfresco.org/model/content/1.0}type": "Photograph",
+        "{http://www.alfresco.org/model/content/1.0}modifier": "admin",
+        "{http://www.alfresco.org/model/system/1.0}node-uuid": "9fe41330-53c4-4618-a306-1e139a39f0d4"
+      },
+      "aspects": [
+        "cm:titled",
+        "cm:dublincore",
+        "cm:auditable",
+        "sys:referenceable",
+        "sys:localized",
+        "cm:author"
+      ],
+      "paths": [
+        {
+          "path": "/{http://www.alfresco.org/model/application/1.0}company_home/{http://www.alfresco.org/model/content/1.0}test/{http://www.alfresco.org/model/content/1.0}folder8/{http://www.alfresco.org/model/content/1.0}IMG_870.jpg"
+        }
+      ],
+      "ancestors": [
+        "workspace://SpacesStore/5ecd16a0-82bc-4244-b16b-f48266e26013",
+        "workspace://SpacesStore/8399104e-0895-4c8b-9fcd-6c3fd425c138",
+        "workspace://SpacesStore/d95c2c55-7f4f-4f59-8953-45d54dfd4610",
+        "workspace://SpacesStore/2441ad01-f754-4411-8cb4-fb2dfaaea943"
+      ],
+      "namePaths": [
+        {
+          "namePath": [
+            "Company Home",
+            "test",
+            "folder8",
+            "IMG_870.jpg"
+          ]
+        }
+      ],
+      "owner": "admin"
+    }

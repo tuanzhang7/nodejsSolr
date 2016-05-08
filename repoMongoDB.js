@@ -202,7 +202,7 @@ exports.createIndexs = function createIndexs(callback) {
                 function (callback) {
                     db.collection('transactions').createIndex(
                         {"commitTimeMs": 1}, null, function (err, results) {
-                            console.log(results);
+                            //console.log(results);
                             callback(null);
                         }
                     );
@@ -210,7 +210,7 @@ exports.createIndexs = function createIndexs(callback) {
                 function (callback) {
                     db.collection('transactions').createIndex(
                         {"id": 1}, null, function (err, results) {
-                            console.log(results);
+                            //console.log(results);
                             callback(null);
                         }
                     );
@@ -218,7 +218,7 @@ exports.createIndexs = function createIndexs(callback) {
                 function (callback) {
                     db.collection('workspace').createIndex(
                         {"sys:node-dbid": 1}, null, function (err, results) {
-                            console.log(results);
+                            //console.log(results);
                             callback(null);
                         }
                     );
@@ -226,7 +226,7 @@ exports.createIndexs = function createIndexs(callback) {
                 function (callback) {
                     db.collection('workspace').createIndex(
                         {"cm:name": 1}, null, function (err, results) {
-                            console.log(results);
+                            //console.log(results);
                             callback(null);
                         }
                     );
@@ -234,7 +234,7 @@ exports.createIndexs = function createIndexs(callback) {
                 function (callback) {
                     db.collection('workspace').createIndex(
                         {"PATH": 1}, null, function (err, results) {
-                            console.log(results);
+                            //console.log(results);
                             callback(null);
                         }
                     );
@@ -242,7 +242,7 @@ exports.createIndexs = function createIndexs(callback) {
                 function (callback) {
                     db.collection('workspace').createIndex(
                         {"id":1,"PATH": 1}, null, function (err, results) {
-                            console.log(results);
+                            //console.log(results);
                             callback(null);
                         }
                     );

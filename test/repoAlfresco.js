@@ -3,15 +3,13 @@ var assert = require('assert');
 var repoAlfresco = require('../repoAlfresco');
 var fs = require('fs');
 
-var obj = fs.readFileSync('./test/node.json', 'utf8');
 describe('repoAlfresco', function() {
+    var obj = fs.readFileSync('./test/node.json', 'utf8');
     describe('#convertAlfNodeJson()', function () {
         var result=repoAlfresco.convertAlfNodeJson(obj);
         it('tenantDomain should not exit', function () {
             assert.equal(undefined, result.tenantDomain);
         });
-
-
         it('NCMS key should with underscore _', function () {
             assert.equal('B26074919E', result['NCMS:dc_source_m']);
         });
@@ -44,5 +42,33 @@ describe('repoAlfresco', function() {
             assert.equal('1976521', result.txnId);
         });
     });
-    
+    describe('#convertAlfNodeJson_v5()', function () {
+        var obj = fs.readFileSync('./test/node_v5.json', 'utf8');
+        var result=repoAlfresco.convertAlfNodeJson(obj);
+        it('tenantDomain should not exit', function () {
+            assert.equal(undefined, result.tenantDomain);
+        });
+       
+        it('cm key', function () {
+            assert.equal('2016-05-06T13:07:05.296Z', result['cm:modified']);
+        });
+        it('cm:name should exist', function () {
+            assert.equal('IMG_870.jpg', result['cm:name']);
+        });
+
+        it('Path should exist', function () {
+            assert.equal('/app:company_home/cm:test/cm:folder8/cm:IMG_870.jpg', result.PATH);
+        });
+
+        it('id should exist and is nodeId', function () {
+            assert.equal('2400', result.id);
+        });
+        it('sys:store-protocol should be workspace', function () {
+            assert.equal('workspace', result['sys:store-protocol']);
+        });
+        
+        it('txnId should exist and is txnId', function () {
+            assert.equal('53', result.txnId);
+        });
+    });
 });

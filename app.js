@@ -1,10 +1,10 @@
-﻿console.time("loading-requireds");
+﻿// console.time("loading-requireds");
 var prompt = require('prompt');
 var moment= require('moment');
 var async = require('async');
 var readlineSync = require('readline-sync');
 
-console.time("loading-requireds-local");
+// console.time("loading-requireds-local");
 //var solrClient = require('./solrClient');
 var logger=require('./log.js').logger;
 var job=require('./job.js');
@@ -12,13 +12,13 @@ var repoMongoDB = require('./repoMongoDB');
 var textFileHelper = require('./textFileHelper');
 var xmlhelper =require('./xmlhelper.js');
 var config = require('./config.js');
-console.timeEnd("loading-requireds-local");
+// console.timeEnd("loading-requireds-local");
 
-console.timeEnd("loading-requireds");
+// console.timeEnd("loading-requireds");
 
-console.time("prompt-start");
+// console.time("prompt-start");
 prompt.start();
-console.timeEnd("prompt-start");
+// console.timeEnd("prompt-start");
 
 //loop();
 var finished=false;
@@ -116,17 +116,13 @@ function processSelection(select,callback){
                         });
                     },
                     function(callback){
-                        console.log("Second");
                         callback();
                     }
                 ],
                 function(err, results){
-
-                    console.log("results");
                     callback();
                 }
             );
-            console.log("outside");
             break;
         case "3":
 
