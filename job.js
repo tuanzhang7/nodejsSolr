@@ -230,7 +230,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                     repoAlfresco.getNodesByTxnId(firstTxnId,lastTxnId, function (err,nodesResult) {
                         if (err) {
                             logger.error('getNodesByTxnId error', err);
-                            callback(err);
+                            return callback(err);
                         }
                         else if (nodesResult) {
                             var nodesArray=JSON.parse(nodesResult).nodes;
@@ -246,7 +246,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                             if(skipNodeIds){
                                 nodeIdList=_.difference(nodeIdList, skipNodeIds);
                             }
-                            size+=nodesArray.length;
+                            size+=nodeIdList.length;
                             callback(null, nodeIdList,transactionsArray);
                         }
                         else{
@@ -266,7 +266,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                         repoAlfresco.getMetadataByNodeIds(chunkArray, function (err,data2) {
                             if(err){
                                 logger.error('getMetadataByNodeIds error:'+err);
-                                callback();
+                                return callback();
                             }
                             else if(data2){
                                 var metadata=JSON.parse(data2);
@@ -277,7 +277,8 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                                     if((obj.owner!=="System" && obj.owner!==undefined)){//obj.type==TYPE||obj.type=="cm:content"
                                         if( obj.type!=="cm:thumbnail" && obj.type!=="cm:folder"&&
                                             obj.type!=="cm:failedThumbnail"&& obj.type!=="cm:person"&&
-                                            obj.properties['cm:content']!==undefined){
+                                            (obj.properties['cm:content']!==undefined||
+                                            obj.properties['{http://www.alfresco.org/model/content/1.0}content']!==undefined)){
 
                                             // if(obj.type!=="cm:content"){
                                             //     logger.info("owner:"+obj.owner + " obj.type:"+obj.type+ " obj.ID:"+obj.id);
@@ -306,7 +307,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
 
                 },
                 function(workspaceArray,archiveArray,transactionsArray, callback) {
-                    //console.log("last waterfall");
+                    console.log("last waterfall workspaceArray:"+workspaceArray.length);
 
                     var upsert=!isFullIndex;
                     async.series([

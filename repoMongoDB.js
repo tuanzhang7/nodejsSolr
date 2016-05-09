@@ -248,8 +248,10 @@ exports.createIndexs = function createIndexs(callback) {
                     );
                 }
             ],
-// optional callback
             function (err, results) {
+                console.log("end create index series");
+                //without db.close() callback not function
+                db.close();
                 callback();
             });
     });
