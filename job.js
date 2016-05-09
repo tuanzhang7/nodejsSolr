@@ -158,11 +158,13 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
     var chunksSize = options.chunksSize || 100;
     var indexCommitTimeInterval = options.indexCommitTimeInterval || 2;
     var TYPE = options.TYPE || "cm:content";
+    var skipArchiveSpace = options.skipArchiveSpace || true;
+    var skipNodeIds = options.skipNodeIds || true;
+
     if(typeof start==="undefined"){start=moment();}
     var finished=false;
 
     var _fromCommitTime=startCommitTime;
-    var skipNodeIds=configs.alfresco.skipNodeId;
 
     async.whilst(
         function () { return !finished; },
@@ -232,12 +234,19 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                         }
                         else if (nodesResult) {
                             var nodesArray=JSON.parse(nodesResult).nodes;
-                            size+=nodesArray.length;
+
+                            if(skipArchiveSpace){
+                                nodesArray = _.reject(nodesArray, function(node){
+                                    return node.nodeRef.startsWith("archive:");
+                                });
+                            }
+
                             var nodeIdList=_.pluck(nodesArray, 'id');
 
                             if(skipNodeIds){
                                 nodeIdList=_.difference(nodeIdList, skipNodeIds);
                             }
+                            size+=nodesArray.length;
                             callback(null, nodeIdList,transactionsArray);
                         }
                         else{
@@ -256,7 +265,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                     async.eachLimit(chunks,getMetadataThreads, function (chunkArray,callback) {
                         repoAlfresco.getMetadataByNodeIds(chunkArray, function (err,data2) {
                             if(err){
-                                logger.error('getMetadataByNodeIds error', err);
+                                logger.error('getMetadataByNodeIds error:'+err);
                                 callback();
                             }
                             else if(data2){
@@ -267,8 +276,13 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
 
                                     if((obj.owner!=="System" && obj.owner!==undefined)){//obj.type==TYPE||obj.type=="cm:content"
                                         if( obj.type!=="cm:thumbnail" && obj.type!=="cm:folder"&&
-                                            obj.type!=="cm:failedThumbnail"&& obj.type!=="cm:person"){
-                                            //logger.info("owner:"+obj.owner + " obj.type:"+obj.type+ " obj.ID:"+obj.id);
+                                            obj.type!=="cm:failedThumbnail"&& obj.type!=="cm:person"&&
+                                            obj.properties['cm:content']!==undefined){
+
+                                            // if(obj.type!=="cm:content"){
+                                            //     logger.info("owner:"+obj.owner + " obj.type:"+obj.type+ " obj.ID:"+obj.id);
+                                            //
+                                            // }
                                             //logger.info(metadata.nodes[0].id);
                                             var result=repoAlfresco.convertAlfNodeJson(JSON.stringify(obj));
                                             //logger.info(result);
@@ -298,7 +312,6 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                     async.series([
                         function(callback){
                             if(workspaceArray&&workspaceArray.length>0){
-                                logger.error('insert to workspace DB:'+workspaceArray.length);
                                 repo.bulkWrite(workspaceArray,"workspace",upsert,function(err,result){
                                     if(err){
                                         logger.error('error bulk insert to workspace DB:'+err);
@@ -331,10 +344,8 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                         }
                     ],
                     function(err, results){
-                        //callback();
+                        callback(null, 'done');
                     });
-                    callback();
-                    callback(null, 'done');
                 }
             ], function (err, result) {
                 if(err==='finished'){

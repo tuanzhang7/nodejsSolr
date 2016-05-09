@@ -100,7 +100,10 @@ exports.getMetadataByNodeIds= function getMetadataByNodeIds(nodeIdList,callback)
 
     var body = JSON.stringify({
         "nodeIds": nodeIdList,
-        "maxResults": 0
+        "maxResults": 0,
+        "includeChildAssociations":false,
+        "includeParentAssociations":false,
+        "includeChildIds":false
     });
     var options = {
         hostname: alfHostName,
@@ -124,9 +127,9 @@ exports.getMetadataByNodeIds= function getMetadataByNodeIds(nodeIdList,callback)
                 return callback(null,result);
             });
         }else if(res.statusCode === 500) {
-            return callback(new Error("no nodes in txns 500: "+nodeIdList[0]  ));
+            return callback(new Error("get metadata by nodeId error, error code:500, nodeIds: "+nodeIdList  ));
         }else if(res.statusCode === 204) {
-            return callback(new Error("no nodes in txns 204: "+nodeIdList[0]  ));
+            return callback(new Error("get metadata by nodeId error, error code:204, nodeIds: "+nodeIdList  ));
         }
     }).on('error', function(e) {
         return callback(new Error("Get metadata error: " +nodeIdList[0]+  "--"+e.message));

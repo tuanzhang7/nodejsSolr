@@ -65,13 +65,17 @@ function getOption(){
     var getMetadataThreads=config.alfresco.getMetadataThreads;
     var maxTxnsResults=config.alfresco.maxTxnsResults;
     var TYPE=config.alfresco.TYPE;
+    var skipNodeIds=config.alfresco.skipNodeId;
+    var skipArchiveSpace=config.alfresco.skipArchiveSpace;
 
     var options={
         getMetadataThreads:getMetadataThreads,
         maxResults:maxTxnsResults,
         indexCommitTimeInterval:indexCommitTimeInterval,
         chunksSize:chunksSize,
-        TYPE:TYPE
+        TYPE:TYPE,
+        skipNodeIds:skipNodeIds,
+        skipArchiveSpace:skipArchiveSpace,
     };
     return options;
 }
