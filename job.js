@@ -170,11 +170,13 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
         function () { return !finished; },
         function (callback) {
             var _toCommitTime=moment(_fromCommitTime).add(indexCommitTimeInterval, 'hours');
+
             var size=0;
             async.waterfall([
                 function(callback) {
                     //console.log("first waterfall");
                     repoAlfresco.getTxnsByTime(_fromCommitTime,_toCommitTime,maxResults,function (err,data) {
+                        logger.info('Time Process:' + _fromCommitTime + "-" + _toCommitTime + "  " + moment(_fromCommitTime).format());
                         if(err){
                             logger.error('getTxnsByTime error', err);
                             return callback(err);
@@ -183,9 +185,9 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                             var txns=JSON.parse(data);
                             var maxTxnCommitTime=txns.maxTxnCommitTime;
                             var maxTxnId=txns.maxTxnId;
-
+                            logger.debug("maxTxnCommitTime:"+maxTxnCommitTime);
                             //Time more than maxTxnCommitTime, exit
-                            if(_toCommitTime>txns.maxTxnCommitTime){
+                            if(_fromCommitTime>txns.maxTxnCommitTime){
                                 logger.info("=== No more data after date "+moment(_toCommitTime).format());
                                 logger.info('==Total txns:'+txnsCounter+ ' maxTxnCommitTime:'+maxTxnCommitTime);
                                 finished=true;
@@ -193,7 +195,10 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                             }
                             else{
                                 var txnsSize=txns.transactions.length;
+                                if(txnsSize>0) {
+                                    logger.info('time:' + _fromCommitTime + "-" + _toCommitTime + "  " + moment(_fromCommitTime).format() + " txnsSize:" + txnsSize);
 
+                                }
                                 //set next round start time
                                 if(txnsSize === maxResults){
                                     _fromCommitTime=_.max(txns.transactions, function(t){ return t.commitTimeMs; }).commitTimeMs;
@@ -206,8 +211,6 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                                 if(txnsSize>0) {
                                     txnsCounter = txnsCounter + txnsSize;
                                     //logger.info(' Total txns:'+txnsCounter);
-                                    logger.info('time:' + _fromCommitTime + "-" + _toCommitTime + "  " + moment(_fromCommitTime).format() + " txnsSize:" + txnsSize);
-
                                     var firstTxnId = _.min(txns.transactions, function (t) {
                                         return t.id;
                                     }).id;
