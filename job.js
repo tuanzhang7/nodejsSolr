@@ -176,7 +176,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                 function(callback) {
                     //console.log("first waterfall");
                     repoAlfresco.getTxnsByTime(_fromCommitTime,_toCommitTime,maxResults,function (err,data) {
-                        logger.info('Time Process:' + _fromCommitTime + "-" + _toCommitTime + "  " + moment(_fromCommitTime).format());
+                        //logger.info('Time Process:' + _fromCommitTime + "-" + _toCommitTime + "  " + moment(_fromCommitTime).format());
                         if(err){
                             logger.error('getTxnsByTime error', err);
                             return callback(err);
@@ -310,7 +310,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
 
                 },
                 function(workspaceArray,archiveArray,transactionsArray, callback) {
-                    console.log("last waterfall workspaceArray:"+workspaceArray.length);
+                    //console.log("last waterfall workspaceArray:"+workspaceArray.length);
 
                     var upsert=!isFullIndex;
                     async.series([
@@ -353,7 +353,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
                 }
             ], function (err, result) {
                 if(err==='finished'){
-                    console.log("waterfall finished");
+                    //console.log("waterfall finished");
                     counter+=size;
                     stopWatch(middle,size);
                     middle=moment().valueOf();
@@ -373,7 +373,7 @@ exports.indexMetadataFromAlf = function indexMetadataFromAlf(options,startCommit
         },
         function (err, n) {
             stopWatch(start,counter);
-            console.log("End Wilist");
+            //console.log("End Wilist");
             callback();
         }
     );
@@ -582,7 +582,7 @@ function stopWatch(start,counter){
     var end = moment().valueOf();
     var duration=moment.duration(end-start);
     var speed=Math.round(counter/duration*1000);
-    logger.info("total:"+counter+" time used:"+duration+"ms"+" speed: "+speed +"/seconds");
+    logger.info(counter+"records in "+duration+"ms "+speed +"/seconds");
 }
 
 

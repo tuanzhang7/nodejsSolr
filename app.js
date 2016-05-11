@@ -46,16 +46,15 @@ async.whilst(
 
 function printMenu(){
     console.log(' ');
+    console.log('Alfresco Host:'+config.alfresco.host);
     console.log(' ');
     console.log('================ ');
     //console.log('1. Index Content');
     //console.log('2. Index Metadata');
-    console.log('1. Show Status');
-    console.log('3. Sync from Alfresco');
-    console.log('4. ReIndex');
-    console.log('5. Dump metadata by path');
-    console.log('6. Dump metadata by NodeId List');
-
+    console.log('1. Synchronize from Alfresco');
+    console.log('2. ReIndex from Alfresco');
+    console.log('3. Dump metadata by path');
+    console.log('4. Dump metadata by NodeId List');
     console.log(' ');
     console.log('q. Quit');
 }
@@ -103,10 +102,8 @@ function processSelection(select,callback){
         //    //job.indexMetadata(startId);
         //    break;
 
-        case "1":
+        case "1-":
             console.log('Show Status......');
-            console.log('Alfresco Host:'+config.alfresco.host);
-
             async.series([
                     function(callback){
                         repoMongoDB.getMaxTxnTime(function(maxTxnTime) {
@@ -128,15 +125,13 @@ function processSelection(select,callback){
                 }
             );
             break;
-        case "3":
-
-            console.log('Index Metadata from alf Host:'+config.alfresco.host);
+        case "1":
 
             var fromCommitTime;
             var isFullIndex=false;
             repoMongoDB.getMaxTxnTime(function(maxTxnTime){
                 if(maxTxnTime){
-                    fromCommitTime=maxTxnTime;
+                    fromCommitTime=maxTxnTime+1;
                 }
                 else{
                     var startDateDefault=config.alfresco.startDateDefault||"2012-01-01";
@@ -154,7 +149,7 @@ function processSelection(select,callback){
                 });
             });
             break;
-        case "4":
+        case "2":
             var isFullIndex=true;
             var startDateDefault=config.alfresco.startDateDefault||"2012-01-01";
 
@@ -198,7 +193,7 @@ function processSelection(select,callback){
                 else{
                     repoMongoDB.getMaxTxnTime(function(maxTxnTime){
                         if(maxTxnTime){
-                            fromCommitTime=maxTxnTime;
+                            fromCommitTime=maxTxnTime+1;
                         }
                         else{
                             prompt.get([prompt_startDate], function (err, result) {
@@ -219,7 +214,7 @@ function processSelection(select,callback){
                 }
             });
             break;
-        case "5":
+        case "3":
             var prompt_dumpPath = {
                 name: 'dumpPath',
                 message: 'dump xml to path',
@@ -246,7 +241,7 @@ function processSelection(select,callback){
                 }
             });
             break;
-        case "6":
+        case "4":
 
             var prompt_dumpPath = {
                 name: 'dumpPath',

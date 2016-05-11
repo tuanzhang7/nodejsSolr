@@ -146,13 +146,14 @@ exports.bulkWrite = function bulkWrite(docs, collection,upsert, callback) {
                 var obj = docs[i];
                 var nodeId = obj['sys:node-dbid'];
                 bulk.find({"sys:node-dbid":nodeId}).upsert().updateOne(obj);
-                bulk.execute(function (err, r) {
-                    console.log(err);
-                    // Finish up test
-                    db.close();
-                    callback(err, r);
-                });
             }
+            bulk.execute(function (err, r) {
+                if(err){
+                    logger.error(err);
+                }
+                db.close();
+                callback(err, r);
+            });
         }
         else{
             col.insertMany(docs,function(err, r) {

@@ -1,21 +1,21 @@
 module.exports = {
   "alfresco": {
-    "host": "localhost",//localhost,10.14.244.72
-    "port":"8080",
+    "host": "10.14.244.72",//localhost
+    "port":"80",
     "contentCachePath":"C:/projects/content/",
     "maxSockets":20,
-    "startDateDefault":"2016-05-01",
+    "startDateDefault":"2012-01-01",
     "indexCommitTimeInterval":"2",
     "chunksSize":30,
     "getMetadataThreads":6,
-    "maxTxnsResults":500,
+    "maxTxnsResults":1000,
     "TYPE":"cm:content",
     "skipNodeId":[11],
     "skipArchiveSpace":true
   },
   "mongodb": {
-    "host": "localhost",//localhost,172.30.11.195
-    "port":"27017",//27017,3306
+    "host": "172.30.11.195",//localhost,172.30.11.195
+    "port":"3306",//27017,3306
     "db":"alf"
   },
   "xml":{
@@ -34,6 +34,6 @@ module.exports = {
 
     ],
     "delimiter":",",
-    "dumppath":"E:/export"
+    "dumppath":"D:/export"
   }
 };
