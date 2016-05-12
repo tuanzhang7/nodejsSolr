@@ -55,6 +55,7 @@ function printMenu(){
     console.log('2. ReIndex from Alfresco');
     console.log('3. Dump metadata by path');
     console.log('4. Dump metadata by NodeId List');
+    console.log('5. Update by NodeIds');
     console.log(' ');
     console.log('q. Quit');
 }
@@ -291,6 +292,34 @@ function processSelection(select,callback){
                     });
                 });
                 
+            });
+            break;
+        case "5":
+            var prompt_nodeIds = {
+                name: 'nodeIds',
+                message: 'key in nodeIds separate by ,',
+                required: true
+            };
+            prompt.get([prompt_nodeIds], function (err, result) {
+                var nodeIds = result.nodeIds;
+                var getMetadataThreads = getOption().getMetadataThreads;
+                if(!nodeIds){
+                    console.log('nodeIds should not blank');
+                    callback(null);
+                }
+                else{
+                    var nodeIdList=nodeIds.split(",");
+                    job.getStoreArrays(nodeIdList,1,getMetadataThreads,function (err,workspaceArray,archiveArray) {
+                        var upsert=true;
+                        if(err){
+                            console.log("error getStoreArrays:"+err);
+                        }
+                        console.log("saving to db:"+workspaceArray.length+' records');
+                        job.saveToDB(workspaceArray,archiveArray,null,upsert,function () {
+                             callback();
+                        });
+                    });
+                }
             });
             break;
         case "q":

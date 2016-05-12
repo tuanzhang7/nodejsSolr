@@ -1,6 +1,6 @@
 module.exports = {
   "alfresco": {
-    "host": "10.14.244.72",//localhost
+    "host": "10.14.244.184",//localhost
     "port":"80",
     "contentCachePath":"C:/projects/content/",
     "maxSockets":20,
@@ -16,7 +16,7 @@ module.exports = {
   "mongodb": {
     "host": "172.30.11.195",//localhost,172.30.11.195
     "port":"3306",//27017,3306
-    "db":"alf"
+    "db":"cms"
   },
   "xml":{
     "excludeFields":[
